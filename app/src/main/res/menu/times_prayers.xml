@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sahrit"
+        android:title="@string/t_sharit" />
+    <item
+        android:id="@+id/mincha"
+        android:title="@string/t_mincha" />
+    <item
+        android:id="@+id/arvit"
+        android:title="@string/t_arvit" />
+    <!--app:actionLayout="@layout/about_button"-->
+    <item
+        android:id="@+id/about"
+
+        android:title="אודות"
+        app:showAsAction="always" />
+</menu>

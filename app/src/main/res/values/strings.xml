@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">זמן תפילה</string>
+    <string name="t_sharit">שחרית</string>
+    <string name="t_mincha">מנחה</string>
+    <string name="t_arvit">ערבית</string>
+    <string name="abouutApp">
+    <i>גרסה 1.2.6</i>\n\n
+    - אפליקציה זמן תפילה מתעדכנת בזמן אמת כך שברגע שמשתמש אחד משנה מניין מסוים השינוי יחול אצל כל משתמשי האפליקציה.\n
+- באפליקציה הושקע זמן רב ולכן, אנא עדכן את המניין אך ורק אם נמצא זמן שאינו נכון.\n
+- בכדי לבצע שינוי יש להיכנס לתפילה הרצויה ולחיצה ארוכה על המניין שמצריך שינוי זמן.</string>
+    <string name="RateTitle"><b>דרג את האפליקציה</b></string>
+    <string name="RateMessage">אם הינך נהנה מאפליקציה זמן תפילה, אשמח לדירוג חיובי. \n הדירוג לוקח פחות מ 15 שניות!</string>
+    <string name="RateYes">דרג עכשיו</string>
+    <string name="RateNo">לא, תודה</string>
+    <string name="RateLater">מאוחר יותר</string>
+</resources>
