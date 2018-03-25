@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/textView2"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:layout_weight="1"
-    android:text="TextView"
-    android:textColor="@color/colorPrimary"
-    android:textSize="24sp" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:text="TextView"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
         android:layout_gravity="center"
+        android:layout_weight="6"
         android:focusable="false"
-        app:srcCompat="@drawable/iconnavigation" />-->
+        app:srcCompat="@drawable/iconnavigation" />
 
 
 </LinearLayout>
