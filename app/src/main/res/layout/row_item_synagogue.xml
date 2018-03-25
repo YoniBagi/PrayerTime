@@ -18,11 +18,10 @@
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_gravity="center"
-        android:layout_weight="6"
-        android:focusable="false"
-        app:srcCompat="@drawable/iconnavigation" />
+        android:layout_weight="2"
+        android:focusable="false" />
 
 
 </LinearLayout>

@@ -30,8 +30,6 @@ public class CustomAdapterSyn extends BaseAdapter {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
     }
-
-
     @Override
     public int getCount() {
         return synagogueArray.size();
@@ -55,7 +53,7 @@ public class CustomAdapterSyn extends BaseAdapter {
 
         TextView prayerPlace = (TextView) convertView.findViewById(R.id.textView2);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView3);
-        imageView.setImageResource(R.drawable.iconnavigation);
+        imageView.setImageResource(R.drawable.waze_nav);
         prayerPlace.setText(synagogueArray.get(position));
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +70,7 @@ public class CustomAdapterSyn extends BaseAdapter {
                         uri = "geo:0,0?q=31.800334, 34.821704&navigate=yes";
                         break;
                     case "קהילתי":
-                        uri = "geo:0,0?q=31.797079, 34.821515&navigate=yes";
+                        uri = "geo:0,0?q=31.796926, 34.821508&navigate=yes";
                         break;
                     case "פעמוני זהב":
                         uri = "geo:0,0?q=31.799785, 34.821791&navigate=yes";
@@ -87,7 +85,7 @@ public class CustomAdapterSyn extends BaseAdapter {
                         uri = "geo:0,0?q=31.797744, 34.820530&navigate=yes";
                         break;
                     case "משפחת ג'יבלי":
-                        uri = "geo:0,0?q=31.797565, 34.825567&navigate=yes";
+                        uri = "geo:0,0?q=31.793562, 34.825174&navigate=yes";
                         break;
                     case "ספריית הרמן":
                         uri = "geo:0,0?q=31.801450, 34.822424&navigate=yes";

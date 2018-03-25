@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void toolbar(){
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("המניין הבא");
+        actionBar.setTitle("המניין הקרוב");
         // actionBar.setDisplayHomeAsUpEnabled(true);
     }
 

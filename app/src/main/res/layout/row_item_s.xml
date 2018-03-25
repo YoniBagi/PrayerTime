@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layoutDirection="rtl">
 
@@ -9,9 +10,10 @@
         android:id="@+id/textView13"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
+        android:paddingLeft="10dp"
         android:text="TextView"
         android:textSize="20sp" />
 
@@ -20,10 +22,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:gravity="left"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:text="22:22"
         android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/ivWaze"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_weight="3"
+        android:gravity="left"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        app:srcCompat="@drawable/waze_nav" />
 </LinearLayout>
