@@ -13,7 +13,7 @@
     <!--app:actionLayout="@layout/about_button"-->
     <item
         android:id="@+id/about"
-
+        android:enabled="true"
         android:title="אודות"
         app:showAsAction="always" />
 </menu>
