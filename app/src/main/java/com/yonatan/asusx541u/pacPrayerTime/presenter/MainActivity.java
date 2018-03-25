@@ -5,19 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -126,88 +119,7 @@ public class MainActivity extends AppCompatActivity {
             getEarlyPrayer();
             return;
         }
-        final ArrayAdapter<String> synagogueArrayAdapter = new ArrayAdapter<String>(this, R.layout.row_item_synagogue,mListSynagogue){
-            @NonNull
-            @Override
-            public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                if(convertView == null){
-                    convertView = View.inflate(MainActivity.this, R.layout.row_item_synagogue, null);
-                }
-
-                TextView prayerPlace = (TextView) convertView.findViewById(R.id.textView2);
-                ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView3);
-                prayerPlace.setText(mListSynagogue.get(position));
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String uri;
-                        switch (mListSynagogue.get(position)){
-                            case "מרכזי" :
-                                uri = "geo:0,0?q=31.801166,34.822807&navigate=yes";
-                                break;
-                            case "תורת החיים":
-                                uri="geo:0,0?q=31.798238, 34.820400&navigate=yes";
-                                break;
-                            case "שערי ציון":
-                                uri = "geo:0,0?q=31.800334, 34.821704&navigate=yes";
-                                break;
-                            case "קהילתי":
-                                uri = "geo:0,0?q=31.797079, 34.821515&navigate=yes";
-                                break;
-                            case "פעמוני זהב":
-                                uri = "geo:0,0?q=31.799785, 34.821791&navigate=yes";
-                                break;
-                            case "שירת קטיף":
-                                uri = "geo:0,0?q=31.801450, 34.822424&navigate=yes";
-                                break;
-                            case "ותיקים":
-                                uri = "geo:0,0?q=31.797079, 34.821515&navigate=yes";
-                                break;
-                            case "ישיבה לצעירים-תורת החיים":
-                                uri = "geo:0,0?q=31.797744, 34.820530&navigate=yes";
-                                break;
-                            case "משפחת ג'יבלי":
-                                uri = "geo:0,0?q=31.797565, 34.825567&navigate=yes";
-                                break;
-                            case "ספריית הרמן":
-                                uri = "geo:0,0?q=31.801450, 34.822424&navigate=yes";
-                                break;
-                            case "ישיבת נתיבות אש":
-                                uri = "geo:0,0?q=31.794517, 34.820958&navigate=yes";
-                                break;
-                            case "בית חלקיה":
-                                uri = "geo:0,0?q=31.791316, 34.809089&navigate=yes";
-                                break;
-                            case "חסדי דב":
-                                uri = "geo:0,0?q=31.795556, 34.822620&navigate=yes";
-                                break;
-                            case "ליד בן כוכב":
-                                uri = "geo:0,0?q=31.798528, 34.825005&navigate=yes";
-                                break;
-                            case "משפחת דהרי":
-                                uri = "geo:0,0?q=31.800664, 34.819863&navigate=yes";
-                                break;
-                            case "מבקשי פניך-תורת החיים":
-                                uri = "geo:0,0?q=31.797767, 34.819690&navigate=yes";
-                                break;
-                            case "מניין השביל דונה א":
-                                uri = "geo:0,0?q=31.796479, 34.824293&navigate=yes";
-                                break;
-                            case "חפץ-חיים":
-                                uri = "geo:0,0?q=31.789837, 34.798124&navigate=yes";
-                                break;
-                            default:
-                                uri = "geo:0,0?q=31.801450, 34.822424&navigate=yes";
-                        }
-
-                        startActivity(new Intent(android.content.Intent.ACTION_VIEW,
-                                Uri.parse(uri)));
-                    }
-                });
-                return convertView;
-            }
-        };
-
+        final CustomAdapterSyn synagogueArrayAdapter = new CustomAdapterSyn(mListSynagogue,getApplicationContext());
         lvSynagogue.setAdapter(synagogueArrayAdapter);
         mDataBase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -322,87 +234,7 @@ public class MainActivity extends AppCompatActivity {
         lvSynagogue = (ListView) findViewById(R.id.listViewSynagogue);
         tvTimePrayer = (TextView) findViewById(R.id.textViewTimePrayer);
         textViewNextPrayer = (TextView) findViewById(R.id.textViewNextPrayer);
-        final ArrayAdapter<String> synagogueArrayAdapter = new ArrayAdapter<String>(this, R.layout.row_item_synagogue,mListSynagogue){
-            @NonNull
-            @Override
-            public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                if(convertView == null){
-                    convertView = View.inflate(MainActivity.this, R.layout.row_item_synagogue, null);
-                }
-
-                TextView prayerPlace = (TextView) convertView.findViewById(R.id.textView2);
-                ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView3);
-                prayerPlace.setText(mListSynagogue.get(position));
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String uri;
-                        switch (mListSynagogue.get(position)){
-                            case "מרכזי" :
-                                uri = "geo:0,0?q=31.801166,34.822807&navigate=yes";
-                                break;
-                            case "תורת החיים":
-                                uri="geo:0,0?q=31.798238, 34.820400&navigate=yes";
-                                break;
-                            case "שערי ציון":
-                                uri = "geo:0,0?q=31.800334, 34.821704&navigate=yes";
-                                break;
-                            case "קהילתי":
-                                uri = "geo:0,0?q=31.797079, 34.821515&navigate=yes";
-                                break;
-                            case "פעמוני זהב":
-                                uri = "geo:0,0?q=31.799785, 34.821791&navigate=yes";
-                                break;
-                            case "שירת קטיף":
-                                uri = "geo:0,0?q=31.801450, 34.822424&navigate=yes";
-                                break;
-                            case "ותיקים":
-                                uri = "geo:0,0?q=31.797079, 34.821515&navigate=yes";
-                                break;
-                            case "ישיבה לצעירים-תורת החיים":
-                                uri = "geo:0,0?q=31.797744, 34.820530&navigate=yes";
-                                break;
-                            case "משפחת ג'יבלי":
-                                uri = "geo:0,0?q=31.797565, 34.825567&navigate=yes";
-                                break;
-                            case "ספריית הרמן":
-                                uri = "geo:0,0?q=31.801450, 34.822424&navigate=yes";
-                                break;
-                            case "ישיבת נתיבות אש":
-                                uri = "geo:0,0?q=31.794517, 34.820958&navigate=yes";
-                                break;
-                            case "בית חלקיה":
-                                uri = "geo:0,0?q=31.791316, 34.809089&navigate=yes";
-                                break;
-                            case "חסדי דב":
-                                uri = "geo:0,0?q=31.795556, 34.822620&navigate=yes";
-                                break;
-                            case "ליד בן כוכב":
-                                uri = "geo:0,0?q=31.798528, 34.825005&navigate=yes";
-                                break;
-                            case "משפחת דהרי":
-                                uri = "geo:0,0?q=31.800664, 34.819863&navigate=yes";
-                                break;
-                            case "מבקשי פניך-תורת החיים":
-                                uri = "geo:0,0?q=31.797767, 34.819690&navigate=yes";
-                                break;
-                            case "מניין השביל דונה א":
-                                uri = "geo:0,0?q=31.796479, 34.824293&navigate=yes";
-                                break;
-                            case "חפץ-חיים":
-                                uri = "geo:0,0?q=31.789837, 34.798124&navigate=yes";
-                                break;
-                            default:
-                                uri = "geo:0,0?q=31.801450, 34.822424&navigate=yes";
-                        }
-
-                        startActivity(new Intent(android.content.Intent.ACTION_VIEW,
-                                Uri.parse(uri)));
-                    }
-                });
-                return convertView;
-            }
-        };
+        final CustomAdapterSyn synagogueArrayAdapter = new CustomAdapterSyn(mListSynagogue,getApplicationContext());
         lvSynagogue.setAdapter(synagogueArrayAdapter);
         mDataBase.addValueEventListener(new ValueEventListener() {
             @Override
