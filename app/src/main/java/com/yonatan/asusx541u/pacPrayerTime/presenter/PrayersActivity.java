@@ -37,7 +37,7 @@ public class PrayersActivity extends AppCompatActivity {
 
     private DatabaseReference mDataBase;
     private ListView mListView;
-    ArrayList<Prayer> mListPrayer = new ArrayList<Prayer>();
+    ArrayList<Prayer> mListPrayer = new ArrayList<>();
     static final int DIALOG_ID=0;
     Prayer mPrayer;
     int hour_x, minute_x;
@@ -49,6 +49,7 @@ public class PrayersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prayers);
+
         Intent intent = getIntent();
         kindPrayerToDB = intent.getStringExtra(MainActivity.KIND_PRAYER);
         toolbar();
@@ -59,7 +60,6 @@ public class PrayersActivity extends AppCompatActivity {
             public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 if(convertView == null){
                     convertView = View.inflate(PrayersActivity.this, R.layout.row_item_s, null);
-
                 }
                 TextView prayerPlace = (TextView) convertView.findViewById(R.id.textView13);
                 TextView prayerTime = (TextView) convertView.findViewById(R.id.textView6);
@@ -140,11 +140,11 @@ public class PrayersActivity extends AppCompatActivity {
         mDataBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> mapMincha = (Map<String, Object>) dataSnapshot.getValue();
+                Map<String, Object> mapMincha = (Map<String, Object>) dataSnapshot.getValue();//mincha:1,2,3,4...
                 //  Map<String, Object> treeMincha =new TreeMap<String,Object>(mapMincha);
                 mListPrayer.clear();
-                for (Map.Entry<String, Object> entry : mapMincha.entrySet()){
-                    Map singlePrayer = (Map) entry.getValue();
+                for (Map.Entry<String, Object> entry : mapMincha.entrySet()){ //1,2,3,4,5..
+                    Map singlePrayer = (Map) entry.getValue();// place:"gbgb", time:"15:46"
                     Prayer prayer = new Prayer((String) singlePrayer.get("place"), (String) singlePrayer.get("time"));
                     mListPrayer.add(prayer);
                 }

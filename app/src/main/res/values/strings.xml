@@ -13,4 +13,6 @@
     <string name="RateYes">דרג עכשיו</string>
     <string name="RateNo">לא, תודה</string>
     <string name="RateLater">מאוחר יותר</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

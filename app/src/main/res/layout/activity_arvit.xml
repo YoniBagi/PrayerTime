@@ -74,7 +74,6 @@
                 app:srcCompat="@drawable/synagogue" />-->
 
             <ImageView
-                android:id="@+id/imageView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -82,7 +81,6 @@
                 app:srcCompat="@drawable/speedometer" />
 
             <ImageView
-                android:id="@+id/imageView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

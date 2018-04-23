@@ -35,7 +35,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvTitleAboutApp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="8"

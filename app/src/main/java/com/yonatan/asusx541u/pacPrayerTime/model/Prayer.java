@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 public class Prayer implements Comparable<Prayer>{
     private String place;
     private String time;
+    private String kind;
 
     public Prayer(String place, String time) {
         this.place = place;
@@ -32,6 +33,13 @@ public class Prayer implements Comparable<Prayer>{
         this.place = place;
     }
 
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
 
 
     @Override

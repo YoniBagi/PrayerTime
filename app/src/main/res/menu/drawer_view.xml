@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_businees"
+            android:title="עסקים"
+            android:icon="@drawable/ic_business_center_black_24dp"
+            android:checked="true">
+        </item>
+
+       <!-- <item
+            android:id="@+id/nav_weather"
+            android:title="מזג האוויר"
+            android:icon="@drawable/ic_ac_unit_black_24dp">
+        </item>-->
+        <item
+            android:id="@+id/nav_prayers"
+            android:title="זמני תפילות"
+            android:icon="@drawable/ic_account_balance_black_24dp">
+            <menu>
+                <item
+                    android:id="@+id/sahrit"
+                    android:icon="@drawable/ic_wb_sunny_black_24dp"
+                    android:title="@string/t_sharit"
+                    android:checkable="true">
+
+                </item>
+                <item
+                    android:id="@+id/mincha"
+                    android:icon="@drawable/ic_brightness_1_black_24dp"
+                    android:title="@string/t_mincha"
+                    android:checkable="true">
+
+                </item>
+                <item
+                    android:id="@+id/arvit"
+                    android:icon="@drawable/ic_brightness_3_black_24dp"
+                    android:title="@string/t_arvit"
+                    android:checkable="true">
+
+                </item>
+            </menu>
+        </item>
+    </group>
+    <group
+        android:id="@+id/menu_about"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_person_outline_black_24dp"
+            android:title="אודות"
+            android:checkable="true"/>
+    </group>
+</menu>
