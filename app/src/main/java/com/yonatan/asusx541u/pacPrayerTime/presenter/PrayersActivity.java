@@ -43,6 +43,7 @@ public class PrayersActivity extends AppCompatActivity {
     int hour_x, minute_x;
     String str_minute, kindPrayerToDB;
     private Calendar currentTime = Calendar.getInstance();
+    String KIND_PRAYER = "com.yonatan.asusx541u.pacPrayerTime.kindPrayer";
 
 
     @Override
@@ -51,7 +52,7 @@ public class PrayersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_prayers);
 
         Intent intent = getIntent();
-        kindPrayerToDB = intent.getStringExtra(MainActivity.KIND_PRAYER);
+        kindPrayerToDB = intent.getStringExtra(KIND_PRAYER);
         toolbar();
         mListView = (ListView) findViewById(R.id.listViewPrayers);
         final ArrayAdapter<Prayer> prayerArrayAdapter = new ArrayAdapter<Prayer>(this, R.layout.row_item_s,mListPrayer){
@@ -177,8 +178,8 @@ public class PrayersActivity extends AppCompatActivity {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                showDialog(DIALOG_ID);
                 mPrayer = (Prayer) parent.getItemAtPosition(position);
+                showDialog(DIALOG_ID);
                 return true;
             }
         });
@@ -186,9 +187,12 @@ public class PrayersActivity extends AppCompatActivity {
 
     @Override
     protected Dialog onCreateDialog(int id){
-        if(id == DIALOG_ID)
-            return new TimePickerDialog(PrayersActivity.this,R.style.DialogTheme,kTimePickerListener, hour_x, minute_x,true);
-        return null;
+      //  if(id == DIALOG_ID) {
+            hour_x = mPrayer.getHours();
+             minute_x = mPrayer.getMinutes();
+            return new TimePickerDialog(PrayersActivity.this, R.style.DialogTheme, kTimePickerListener, hour_x, minute_x, true);
+        //}
+       // return null;
     }
 
     protected TimePickerDialog.OnTimeSetListener kTimePickerListener = new TimePickerDialog.OnTimeSetListener() {

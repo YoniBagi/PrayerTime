@@ -41,7 +41,14 @@ public class Prayer implements Comparable<Prayer>{
         this.kind = kind;
     }
 
+    public int getHours(){
+        int x = Integer.parseInt((time.substring(0, time.indexOf(":"))));
+        return Integer.parseInt((time.substring(0, time.indexOf(":"))));
+    }
 
+    public int getMinutes(){
+        return Integer.parseInt(time.substring(time.indexOf(":") + 1));
+    }
     @Override
     public int compareTo(@NonNull Prayer mPrayer) {
         // newTime = for example, to "1531" and this mean to 15:31

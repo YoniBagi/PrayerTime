@@ -8,15 +8,7 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="14"
-        android:background="@drawable/layout_bg"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp" />
+
 
     <GridView
         android:id="@+id/gridViewCategory"

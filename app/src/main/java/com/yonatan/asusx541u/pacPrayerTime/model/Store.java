@@ -12,6 +12,7 @@ public class Store {
     private String name;
     private String note;
     private String number_phone;
+    private String link_icon_store;
     private Map opening_hours;
 
     public void setAdress(String adress) {
@@ -51,16 +52,26 @@ public class Store {
         return number_phone;
     }
 
+    public String getLink_icon_store() {
+        return link_icon_store;
+    }
+
+    public void setLink_icon_store(String link_icon_store) {
+        this.link_icon_store = link_icon_store;
+    }
+
+
     public Map getOpening_hours() {
         return opening_hours;
     }
 
-    public Store(String adress, String name, String note, String number_phone, Map opening_hours) {
+    public Store(String adress, String name, String note, String number_phone, String link_icon_store, Map opening_hours) {
 
         this.adress = adress;
         this.name = name;
         this.note = note;
         this.number_phone = number_phone;
+        this.link_icon_store = link_icon_store;
         this.opening_hours = opening_hours;
     }
 }

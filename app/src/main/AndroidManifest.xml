@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,18 +14,23 @@
         <activity android:name=".presenter.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presenter.SahritActivity" />
-        <activity android:name=".presenter.MinchaActivity" />
-        <activity android:name=".presenter.ArvitActivity" />
         <activity android:name=".presenter.AboutActivity" />
         <activity android:name=".presenter.MainActivity" />
         <activity android:name=".presenter.PrayersActivity" />
         <activity android:name=".presenter.BusinessActivity" />
-        <activity android:name=".presenter.StoresActivity"></activity>
+        <activity android:name=".presenter.StoresActivity" />
+        <activity
+            android:name=".presenter.PopActivity"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".presenter.LessonsActivity" />
+        <activity
+            android:name=".presenter.AdActivity"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".presenter.NewsActivity">
+        </activity>
     </application>
 
 </manifest>

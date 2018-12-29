@@ -1,4 +1,4 @@
-package com.yonatan.asusx541u.pacPrayerTime.presenter;
+package com.yonatan.asusx541u.pacPrayerTime.adapters;
 
 import android.content.Context;
 import android.content.Intent;

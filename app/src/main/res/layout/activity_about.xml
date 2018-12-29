@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="8"
                 android:gravity="center"
-                android:text="אפליקציה זמן תפילה"
+                android:text="אפליקציה שורק נט"
                 android:textColor="@color/colorPrimary"
                 android:textDirection="rtl"
                 android:textStyle="bold"
@@ -81,8 +81,8 @@
                 android:paddingRight="5dp"
                 android:paddingTop="5dp"
                 android:scrollbars="vertical"
-                android:text="שמי יהונתן בגיזדה, מהנדס תוכנה ומפתח אפליקציות בזמני הפנוי.\n
-אפליקציה זו פותחה במטרה להקל על תושבי הישוב יד בנימין במציאת זמני התפילות.\n
+                android:text="
+אפליקציה זו פותחה במטרה להקל על תושבי המועצה נחל-שורק במציאת זמני התפילות ומידע על עסקים מקומיים.\n
 אשמח לקבל תגובות והערות."
                 android:textColor="@color/colorPrimary"
                 android:textDirection="rtl"

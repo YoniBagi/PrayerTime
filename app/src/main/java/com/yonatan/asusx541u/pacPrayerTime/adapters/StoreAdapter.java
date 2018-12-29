@@ -1,4 +1,4 @@
-package com.yonatan.asusx541u.pacPrayerTime.presenter;
+package com.yonatan.asusx541u.pacPrayerTime.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.model.Store;
 
@@ -75,11 +77,13 @@ public class StoreAdapter extends BaseExpandableListAdapter {
         TextView tvNameStore = (TextView) convertView.findViewById(R.id.tvNameStore);
         TextView tvNumberPhoneStore = (TextView) convertView.findViewById(R.id.tvNumberPhoneStore);
         TextView tvAdressStore = (TextView) convertView.findViewById(R.id.tvAdressStore);
+        ImageView ivItemStore = (ImageView) convertView.findViewById(R.id.ivItemStore);
 
         tvNameStore.setText(storeArrayList.get(groupPosition).getName());
         tvNumberPhoneStore.setText(storeArrayList.get(groupPosition).getNumber_phone());
         //tvNumberPhoneStore.setTextIsSelectable(true);
         tvAdressStore.setText(storeArrayList.get(groupPosition).getAdress());
+        Picasso.with(context).load(storeArrayList.get(groupPosition).getLink_icon_store()).placeholder(R.mipmap.ic_launcher_light).resize(100,100).into(ivItemStore);
         return convertView;
     }
 

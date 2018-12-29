@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.yonatan.asusx541u.pacPrayerTime.presenter.PopActivity">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_fileName="no_internet_connection.json"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_weight="2"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:text="אין חיבור לאינטרנט"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimary" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="התחבר לאינטרנט בכדי לקבל מידע עדכני"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:textSize="24dp"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimary"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_fileName="cloud_disconnection.json"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_weight="2" />
+</LinearLayout>

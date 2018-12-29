@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="7dp"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardBackgroundColor="#FFFFFF">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvTimeLesson"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="9:00"
+                    android:layout_weight="3"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:padding="2dp"/>
+                <TextView
+                    android:id="@+id/tvSubject"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="דף יומי"
+                    android:textSize="17sp"
+                    android:layout_weight="2"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:padding="3dp"/>
+                <TextView
+                    android:id="@+id/tvLecturer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="הרב מלמד"
+                    android:layout_weight="3"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:padding="2dp"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tvPlaceLesson"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="שערי ציון"
+                android:layout_weight="3"
+                android:textSize="10sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="2dp"/>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

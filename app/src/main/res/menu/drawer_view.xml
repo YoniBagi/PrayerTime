@@ -7,40 +7,118 @@
             android:icon="@drawable/ic_business_center_black_24dp"
             android:checked="true">
         </item>
-
+    </group>
        <!-- <item
             android:id="@+id/nav_weather"
             android:title="מזג האוויר"
             android:icon="@drawable/ic_ac_unit_black_24dp">
         </item>-->
+    <group android:id="@+id/menu_news"
+        android:checkableBehavior="single">
+       <!-- <item
+            android:id="@+id/nav_news"
+            android:checkable="true"
+            android:title="חדשות"
+            android:icon="@drawable/newspaper"></item> -->
+    </group>
+    <group
+        android:id="@+id/menu_nextPrayer"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_nextPrayer"
+            android:title="המניין הקרוב"
+            android:icon="@drawable/ic_directions_run_black_24dp"
+            android:checkable="true"
+            ></item>
+    </group>
+    <group android:id="@+id/menu_prayers"
+        android:checkableBehavior="single">>
         <item
             android:id="@+id/nav_prayers"
             android:title="זמני תפילות"
-            android:icon="@drawable/ic_account_balance_black_24dp">
-            <menu>
+            android:icon="@drawable/ic_account_balance_black_24dp"/>
                 <item
                     android:id="@+id/sahrit"
                     android:icon="@drawable/ic_wb_sunny_black_24dp"
                     android:title="@string/t_sharit"
-                    android:checkable="true">
+                    android:checkable="true"
+                    android:visible="false"
+                    >
 
                 </item>
                 <item
                     android:id="@+id/mincha"
                     android:icon="@drawable/ic_brightness_1_black_24dp"
                     android:title="@string/t_mincha"
-                    android:checkable="true">
+                    android:checkable="true"
+                    android:visible="false">
 
                 </item>
                 <item
                     android:id="@+id/arvit"
                     android:icon="@drawable/ic_brightness_3_black_24dp"
                     android:title="@string/t_arvit"
-                    android:checkable="true">
+                    android:checkable="true"
+                    android:visible="false">
 
                 </item>
-            </menu>
+
+    </group>
+    <group
+        android:id="@+id/menu_lessons"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/lessons"
+            android:title="שיעורי תורה"
+            android:icon="@drawable/ic_whatshot_black_24dp"
+            android:checkable="true">
         </item>
+        <item
+            android:id="@+id/lessons_1"
+            android:title="יום ראשון"
+            android:icon="@drawable/ic_calendar_1"
+            android:checkable="true"
+            android:visible="false"></item>
+        <item
+            android:id="@+id/lessons_2"
+            android:title="יום שני"
+            android:icon="@drawable/ic_calendar_2"
+            android:checkable="true"
+            android:visible="false"></item>
+        <item
+            android:id="@+id/lessons_3"
+            android:title="יום שלישי"
+            android:icon="@drawable/ic_calendar_3"
+            android:checkable="true"
+            android:visible="false"></item>
+        <item
+            android:id="@+id/lessons_4"
+            android:title="יום רביעי"
+            android:icon="@drawable/ic_calendar_4"
+            android:checkable="true"
+            android:visible="false"></item>
+        <item
+            android:id="@+id/lessons_5"
+            android:title="יום חמישי"
+            android:icon="@drawable/ic_calendar_5"
+            android:checkable="true"
+            android:visible="false"></item>
+        <item
+            android:id="@+id/lessons_6"
+            android:title="יום שישי"
+            android:icon="@drawable/ic_calendar_6"
+            android:checkable="true"
+            android:visible="false"></item>
+        <!--<item
+            android:id="@+id/lessons_7"
+            android:title="יום שבת"
+            android:icon="@drawable/ic_calendar_7"
+            android:checkable="true"
+            android:visible="false"></item>-->
+
+
+
+
     </group>
     <group
         android:id="@+id/menu_about"

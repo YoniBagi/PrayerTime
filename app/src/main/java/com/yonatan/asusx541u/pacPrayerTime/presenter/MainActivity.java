@@ -1,36 +1,33 @@
 package com.yonatan.asusx541u.pacPrayerTime.presenter;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kobakei.ratethisapp.RateThisApp;
+import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 
@@ -53,10 +50,11 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Prayer> allPrayers = new ArrayList<>();
     //The next two variables are to keep the number of times the user enter to the app.
     private SharedPreferences mPref, mPrefAfter ;
+    //This final variable to send info to another activity
     final static String KIND_PRAYER = "com.yonatan.asusx541u.pacPrayerTime.kindPrayer";
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle mToggle;
-    ActionBarDrawerToggle drawerToggle;
+    LottieAnimationView animationView_prayer, animationView_clock, animationView_location;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,25 +63,38 @@ public class MainActivity extends AppCompatActivity {
 
         navigation();
         toolbar();
-        checkAvailableNetwork();
         nextPrayer("sahrit");
+        checkAvailableNetwork();
         allPrayers();
         initialRateTheApp();
         mPref = getPreferences(Context.MODE_PRIVATE);
         mPrefAfter = getPreferences(Context.MODE_PRIVATE);
+        initAnimation();
+    }
+
+    private void initAnimation() {
+        animationView_prayer = findViewById(R.id.lottie_prayer);
+        final ValueAnimator animator = ValueAnimator.ofFloat(0f,1f).setDuration(3500);
+        //animator.setRepeatCount(1);
+        final LottieAnimationView finalAnimationView = animationView_prayer;
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                finalAnimationView.setProgress((Float) animator.getAnimatedValue());
+            }
+        });
+        animator.start();
     }
 
 
     private void navigation() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
 
        drawerLayout.addDrawerListener(
                 new DrawerLayout.DrawerListener() {
                     @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-                    }
+                    public void onDrawerSlide(View drawerView, float slideOffset) {}
 
                     @Override
                     public void onDrawerOpened(View drawerView) {
@@ -93,48 +104,125 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDrawerClosed(View drawerView) {
                         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+                            menu = navigationView.getMenu();
+                            collapsePrayers(false);
+                            collapseLessons(false);
+
                     }
 
                     @Override
-                    public void onDrawerStateChanged(int newState) {
-
-                    }
+                    public void onDrawerStateChanged(int newState) {}
                 }
         );
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                drawerLayout.closeDrawers();
+                menu = navigationView.getMenu();
                 switch (item.getItemId()){
+                   /* case R.id.nav_news:
+                        drawerLayout.closeDrawers();
+                        startActivity(new Intent(MainActivity.this, NewsActivity.class));*/
+                    case R.id.nav_nextPrayer:
+                        drawerLayout.closeDrawers();
+                        return true;
+                    case R.id.nav_prayers:
+                        //Collapsible menu item inside navigation drawer
+                        boolean b = !(menu.findItem(R.id.sahrit).isVisible());
+                        collapsePrayers(b);
+                        collapseLessons(false);
+                        return true;
                     case R.id.sahrit:
+                        drawerLayout.closeDrawers();
                         Intent i = new Intent(MainActivity.this, PrayersActivity.class);
                         i.putExtra(KIND_PRAYER,"sahrit");
                         startActivity(i);
                         return true;
                     case R.id.mincha:
+                        drawerLayout.closeDrawers();
                         Intent intent = new Intent(MainActivity.this, PrayersActivity.class);
                         intent.putExtra(KIND_PRAYER,"mincha");
                         startActivity(intent);
                         return true;
                     case R.id.arvit:
+                        drawerLayout.closeDrawers();
                         Intent intentArvit = new Intent(MainActivity.this, PrayersActivity.class);
                         intentArvit.putExtra(KIND_PRAYER,"arvit");
                         startActivity(intentArvit);
                         return true;
                     case R.id.about:
+                        drawerLayout.closeDrawers();
                         Intent intentAbout = new Intent(MainActivity.this, AboutActivity.class);
                         startActivity(intentAbout);
                         return  true;
                     case R.id.nav_businees:
+                        drawerLayout.closeDrawers();
                         startActivity(new Intent(MainActivity.this, BusinessActivity.class));
+                        return true;
+                    case R.id.lessons:
+                        //Collapsible menu item inside navigation drawer
+                        boolean visible = !menu.findItem(R.id.lessons_1).isVisible();
+                        collapseLessons(visible);
+                        collapsePrayers(false);
+                        return true;
+                    case R.id.lessons_1:
+                        drawerLayout.closeDrawers();
+                        Intent intent1 = new Intent(MainActivity.this,LessonsActivity.class);
+                        intent1.putExtra("KEY_DAY","sunday");
+                        startActivity(intent1);
+                        return true;
+                    case R.id.lessons_2:
+                        drawerLayout.closeDrawers();
+                        Intent intent2 = new Intent(MainActivity.this,LessonsActivity.class);
+                        intent2.putExtra("KEY_DAY","monday");
+                        startActivity(intent2);
+                        return true;
+                    case R.id.lessons_3:
+                        drawerLayout.closeDrawers();
+                        Intent intent3 = new Intent(MainActivity.this,LessonsActivity.class);
+                        intent3.putExtra("KEY_DAY","tuesday");
+                        startActivity(intent3);
+                        return true;
+                    case R.id.lessons_4:
+                        drawerLayout.closeDrawers();
+                        Intent intent4 = new Intent(MainActivity.this,LessonsActivity.class);
+                        intent4.putExtra("KEY_DAY","wednesday");
+                        startActivity(intent4);
+                        return true;
+                    case R.id.lessons_5:
+                        drawerLayout.closeDrawers();
+                        Intent intent5 = new Intent(MainActivity.this,LessonsActivity.class);
+                        intent5.putExtra("KEY_DAY","thursday");
+                        startActivity(intent5);
+                        return true;
+                    case R.id.lessons_6:
+                        drawerLayout.closeDrawers();
+                        Intent intent6 = new Intent(MainActivity.this,LessonsActivity.class);
+                        intent6.putExtra("KEY_DAY","friday");
+                        startActivity(intent6);
                         return true;
                 }
                 return true;
             }
         });
+
     }
 
+    private void collapseLessons(boolean bool) {
+        menu.findItem(R.id.lessons_1).setVisible(bool);
+        menu.findItem(R.id.lessons_2).setVisible(bool);
+        menu.findItem(R.id.lessons_3).setVisible(bool);
+        menu.findItem(R.id.lessons_4).setVisible(bool);
+        menu.findItem(R.id.lessons_5).setVisible(bool);
+        menu.findItem(R.id.lessons_6).setVisible(bool);
+        //menu.findItem(R.id.lessons_7).setVisible(bool);
+    }
+
+    private void collapsePrayers(boolean b) {
+            menu.findItem(R.id.sahrit).setVisible(b);
+            menu.findItem(R.id.mincha).setVisible(b);
+            menu.findItem(R.id.arvit).setVisible(b);
+    }
 
     private void initialRateTheApp() {
         RateThisApp.onCreate(this);
@@ -145,18 +233,19 @@ public class MainActivity extends AppCompatActivity {
         config.setNoButtonText(R.string.RateNo);
         config.setCancelButtonText(R.string.RateLater);
         RateThisApp.init(config);
+
     }
 
     private void checkAvailableNetwork() {
-        if(!isNetworkAvailable())
-            Toast.makeText(MainActivity.this,"אין חיבור לאינטרנט, התחבר בכדי לקבל מידע עדכני",Toast.LENGTH_LONG).show();
+        if(!isNetworkAvailable()) {
+                startActivity(new Intent(MainActivity.this, PopActivity.class));
+        }
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         nextPrayer("sahrit");
-       // getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
         showRateTheApp();
     }
 
@@ -171,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         afterTimes = mPrefAfter.getInt("numAfter",1);
         if (counterLaunch > afterTimes){
             RateThisApp.showRateDialog(this);
-            afterTimes *= 2;
+            afterTimes *= 3;
             mPrefAfter.edit().putInt("numAfter",afterTimes).commit();
         }
         counterLaunch++;
@@ -185,10 +274,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void nextPrayer(final String prayer){
         mDataBase = FirebaseDatabase.getInstance().getReference().child(prayer);
-        lvSynagogue = (ListView) findViewById(R.id.listViewSynagogue);
-        tvTimePrayer = (TextView) findViewById(R.id.textViewTimePrayer);
-        textViewNextPrayer = (TextView) findViewById(R.id.textViewNextPrayer);
-        //ImageView imageView = (ImageView) findViewById(R.id.imageView3) ;
+        lvSynagogue =  findViewById(R.id.listViewSynagogue);
+        tvTimePrayer =  findViewById(R.id.textViewTimePrayer);
+        textViewNextPrayer = findViewById(R.id.textViewNextPrayer);
         currentTime = Calendar.getInstance();
         flag = false;
         //A special case, if it's Saturday night I'm not interested in Arvit prayers of the weekday
@@ -205,16 +293,14 @@ public class MainActivity extends AppCompatActivity {
                 mListPrayer.clear();
                 /*dataSnapshot handle the reference to whole DB of a certain prayer and func getValue give all child to HashMap */
                 Map<String, Object> mapPrayer = (Map<String, Object>) dataSnapshot.getValue();
-               // Map<String,Object> treePrayer = new TreeMap<String, Object>(mapPrayer);
-                for (Map.Entry<String,Object> entry : mapPrayer.entrySet()) {
+                for (Map.Entry<String, Object> entry : mapPrayer.entrySet()) {
                     Map singlePrayer = (Map) entry.getValue();
                     Prayer mPrayer = new Prayer((String) singlePrayer.get("place"), (String) singlePrayer.get("time"));
                     mListPrayer.add(mPrayer);
                 }
-                if(currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY || currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY)
-                    for(Prayer prayer: mListPrayer)
-                    {
-                        if(prayer.getPlace().equals("שערי ציון") && prayer.getTime().equals("6:00"))
+                if (currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY || currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY)
+                    for (Prayer prayer : mListPrayer) {
+                        if (prayer.getPlace().equals("שערי ציון") && prayer.getTime().equals("6:00"))
                             prayer.setTime("5:50");
                         else if (prayer.getPlace().equals("מרכזי") && prayer.getTime().equals("6:00"))
                             prayer.setTime("5:50");
@@ -224,81 +310,60 @@ public class MainActivity extends AppCompatActivity {
                 currentPrayer = 0;
                 mListSynagogue.clear();
 
-                for (Prayer singlePrayer : mListPrayer){
+                for (Prayer singlePrayer : mListPrayer) {
                     nextTimeT = singlePrayer.getTime();
                     hour = Integer.parseInt(nextTimeT.substring(0, nextTimeT.indexOf(":")));
-                    minutes = Integer.parseInt(nextTimeT.substring(nextTimeT.indexOf(":") +1));
-                    if(hour ==  currentTime.get(Calendar.HOUR_OF_DAY)){
-                        if (minutes >= currentTime.get(Calendar.MINUTE)){
+                    minutes = Integer.parseInt(nextTimeT.substring(nextTimeT.indexOf(":") + 1));
+                    if (hour == currentTime.get(Calendar.HOUR_OF_DAY)) {
+                        if (minutes >= currentTime.get(Calendar.MINUTE)) {
                             flag = true;
                             mListSynagogue.add(singlePrayer.getPlace());
                             /*Add all places of prayer at the same time */
-                            while(mListPrayer.size() != currentPrayer+1) {
+                            while (mListPrayer.size() != currentPrayer + 1) {
                                 tempNextTimePrayer = mListPrayer.get(currentPrayer + 1).getTime();
                                 if (tempNextTimePrayer.equals(nextTimeT)) {
                                     mListSynagogue.add(mListPrayer.get(currentPrayer + 1).getPlace());
-//                                    currentPrayer++;
                                 }
-                               /* else*/currentPrayer++;
+                                currentPrayer++;
                             }
                             synagogueArrayAdapter.notifyDataSetChanged();
                             tvTimePrayer.setText(singlePrayer.getTime());
-                            if(dataSnapshot.getKey() == "sahrit"){
-                                textViewNextPrayer.setText("שחרית");
-                            }
-                            else if(dataSnapshot.getKey() == "mincha"){
-                                textViewNextPrayer.setText("מנחה");
-                            }
-                            else {textViewNextPrayer.setText("ערבית");}
+                            textViewNextPrayer.setText(namePrayerToHeb(dataSnapshot.getKey()));
                             return;
                         }
-                    }
-                    else if(hour > currentTime.get(Calendar.HOUR_OF_DAY)) {
+                    } else if (hour > currentTime.get(Calendar.HOUR_OF_DAY)) {
                         mListSynagogue.add(singlePrayer.getPlace());
-                        while(mListPrayer.size() != currentPrayer+1) {
+                        while (mListPrayer.size() != currentPrayer + 1) {
                             tempNextTimePrayer = mListPrayer.get(currentPrayer + 1).getTime();
                             if (tempNextTimePrayer.equals(nextTimeT)) {
                                 mListSynagogue.add(mListPrayer.get(currentPrayer + 1).getPlace());
                             }
-                             currentPrayer++;
+                            currentPrayer++;
                         }
                         tvTimePrayer.setText(singlePrayer.getTime());
                         synagogueArrayAdapter.notifyDataSetChanged();
                         flag = true;
                         textViewNextPrayer.setText(namePrayerToHeb(dataSnapshot.getKey()));
-                        /*if(dataSnapshot.getKey() == "sahrit"){
-                            textViewNextPrayer.setText("שחרית");
-                        }
-                        else if(dataSnapshot.getKey() == "mincha"){
-                            textViewNextPrayer.setText("מנחה");
-                        }
-                        else {textViewNextPrayer.setText("ערבית");}*/
                         return;
                     }
-                    currentPrayer ++;
+                    currentPrayer++;
                 }
 
-                if(dataSnapshot.getKey() == "sahrit" && !flag){
+                if (dataSnapshot.getKey() == "sahrit" && !flag) {
                     mListPrayer.clear();
                     nextPrayer("mincha");
-                }
-                else if(dataSnapshot.getKey() == "mincha" && !flag){
+                } else if (dataSnapshot.getKey() == "mincha" && !flag) {
                     mListPrayer.clear();
                     nextPrayer("arvit");
                 }
                 /*This case happens after the last prayer and it is not yet 00:00.*/
-                else if(!flag) getEarlyPrayer();
-
+                else if (!flag) getEarlyPrayer();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
-
         });
-
-
     }
 /*  General: This method used for to cases:
 *       1. when the day is Saturday.
@@ -377,6 +442,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+                if (currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY || currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY)
+                    for (Prayer prayer : allPrayers) {
+                        if (prayer.getPlace().equals("שערי ציון") && prayer.getTime().equals("6:00"))
+                            prayer.setTime("5:50");
+                        else if (prayer.getPlace().equals("מרכזי") && prayer.getTime().equals("6:00"))
+                            prayer.setTime("5:50");
+
+                    }
                 Collections.sort(allPrayers);
             }
 
@@ -396,16 +469,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-    public void toolbar(){
+    public void toolbar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("המניין הקרוב");
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    //When the user push on menu button
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -415,46 +485,56 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+        textViewNextPrayer = findViewById(R.id.textViewNextPrayer);
+        animationView_clock = findViewById(R.id.lottie_clock);
+        animationView_location = findViewById(R.id.lottie_location);
+        animationView_location.playAnimation();
+        animationView_clock.playAnimation();
+        animationView_prayer.playAnimation();
         String flag;
         switch (item.getItemId()) {
             case android.R.id.home:
                 if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawers();
-                    //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-                    //ActionBar actionBar = getSupportActionBar();
-                    //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
                 }
                 else {
                     drawerLayout.openDrawer(GravityCompat.START);
-                    //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
-                   // ActionBar actionBar = getSupportActionBar();
-                   // actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
                 }
                 return true;
             case R.id.next_prayer:
-                flag = "next";
-                String strTimeAppears = tvTimePrayer.getText().toString();
-                int intTimeApeers = Integer.parseInt((strTimeAppears.substring(0, strTimeAppears.indexOf(":")))  + (strTimeAppears.substring(strTimeAppears.indexOf(":") + 1)));
-                for(int i=0; i< allPrayers.size(); i++){
-                    String strTimeAtList = allPrayers.get(i).getTime();
-                    int intTimeAtList = Integer.parseInt(((strTimeAtList.substring(0, strTimeAtList.indexOf(":"))) + (strTimeAtList.substring(strTimeAtList.indexOf(":") + 1))));
-                    if(intTimeAtList > intTimeApeers){
-                        updateFieldWhenUserClickNextAndPrev(i,flag);
-                        return true;
+                if(textViewNextPrayer.getText().toString().matches("")){
+                    startActivity(new Intent(MainActivity.this, PopActivity.class));
+                }
+                else {
+                    flag = "next";
+                    String strTimeAppears = tvTimePrayer.getText().toString();
+                    int intTimeApeers = Integer.parseInt((strTimeAppears.substring(0, strTimeAppears.indexOf(":"))) + (strTimeAppears.substring(strTimeAppears.indexOf(":") + 1)));
+                    for (int i = 0; i < allPrayers.size(); i++) {
+                        String strTimeAtList = allPrayers.get(i).getTime();
+                        int intTimeAtList = Integer.parseInt(((strTimeAtList.substring(0, strTimeAtList.indexOf(":"))) + (strTimeAtList.substring(strTimeAtList.indexOf(":") + 1))));
+                        if (intTimeAtList > intTimeApeers) {
+                            updateFieldWhenUserClickNextAndPrev(i, flag);
+                            return true;
+                        }
                     }
                 }
                 return true;
 
             case R.id.prev_prayer:
-                flag = "prev";
-                String strTimeAppearsPrev = tvTimePrayer.getText().toString();
-                int intTimeApeersPrev = Integer.parseInt((strTimeAppearsPrev.substring(0, strTimeAppearsPrev.indexOf(":")))  + (strTimeAppearsPrev.substring(strTimeAppearsPrev.indexOf(":") + 1)));
-                for(int i= allPrayers.size()-1; i>=0 ; i--){
-                    String strTimeAtList = allPrayers.get(i).getTime();
-                    int intTimeAtList = Integer.parseInt(((strTimeAtList.substring(0, strTimeAtList.indexOf(":"))) + (strTimeAtList.substring(strTimeAtList.indexOf(":") + 1))));
-                    if(intTimeApeersPrev > intTimeAtList){
-                        updateFieldWhenUserClickNextAndPrev(i, flag);
-                        return true;
+                if(textViewNextPrayer.getText().toString().matches("")){
+                    startActivity(new Intent(MainActivity.this, PopActivity.class));
+                }
+                else {
+                    flag = "prev";
+                    String strTimeAppearsPrev = tvTimePrayer.getText().toString();
+                    int intTimeApeersPrev = Integer.parseInt((strTimeAppearsPrev.substring(0, strTimeAppearsPrev.indexOf(":"))) + (strTimeAppearsPrev.substring(strTimeAppearsPrev.indexOf(":") + 1)));
+                    for (int i = allPrayers.size() - 1; i >= 0; i--) {
+                        String strTimeAtList = allPrayers.get(i).getTime();
+                        int intTimeAtList = Integer.parseInt(((strTimeAtList.substring(0, strTimeAtList.indexOf(":"))) + (strTimeAtList.substring(strTimeAtList.indexOf(":") + 1))));
+                        if (intTimeApeersPrev > intTimeAtList) {
+                            updateFieldWhenUserClickNextAndPrev(i, flag);
+                            return true;
+                        }
                     }
                 }
                 return true;
