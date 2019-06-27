@@ -26,7 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kobakei.ratethisapp.RateThisApp;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
 import com.yonatan.asusx541u.pacPrayerTime.R;
@@ -66,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         nextPrayer("sahrit");
         checkAvailableNetwork();
         allPrayers();
-        initialRateTheApp();
         mPref = getPreferences(Context.MODE_PRIVATE);
         mPrefAfter = getPreferences(Context.MODE_PRIVATE);
         initAnimation();
@@ -224,18 +222,6 @@ public class MainActivity extends AppCompatActivity {
             menu.findItem(R.id.arvit).setVisible(b);
     }
 
-    private void initialRateTheApp() {
-        RateThisApp.onCreate(this);
-        RateThisApp.Config config = new RateThisApp.Config();
-        config.setTitle(R.string.RateTitle);
-        config.setMessage(R.string.RateMessage);
-        config.setYesButtonText(R.string.RateYes);
-        config.setNoButtonText(R.string.RateNo);
-        config.setCancelButtonText(R.string.RateLater);
-        RateThisApp.init(config);
-
-    }
-
     private void checkAvailableNetwork() {
         if(!isNetworkAvailable()) {
                 startActivity(new Intent(MainActivity.this, PopActivity.class));
@@ -246,26 +232,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         nextPrayer("sahrit");
-        showRateTheApp();
     }
 
-    /*
-        General: This function calculates the number of times the user enter to the app
-         and then displays the message to rate.
-        Paramters: NONE
-        Return Value: NONE
-    */
-    private void showRateTheApp() {
-        counterLaunch = mPref.getInt("numRun",0);
-        afterTimes = mPrefAfter.getInt("numAfter",1);
-        if (counterLaunch > afterTimes){
-            RateThisApp.showRateDialog(this);
-            afterTimes *= 3;
-            mPrefAfter.edit().putInt("numAfter",afterTimes).commit();
-        }
-        counterLaunch++;
-        mPref.edit().putInt("numRun",counterLaunch).commit();
-    }
+
 
   /*  public void onWindowFocusChanged(boolean hasFocus){
         super.onWindowFocusChanged(hasFocus);
