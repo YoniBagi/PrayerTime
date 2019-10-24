@@ -3,7 +3,7 @@ package com.yonatan.asusx541u.pacPrayerTime.presenter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
@@ -27,46 +27,49 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
+import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
+import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
+import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
 import com.yonatan.asusx541u.pacPrayerTime.R;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PrayersViewPagerAdapter.ClickPrayerCallBack {
 
     private DatabaseReference mDataBase;
     private TextView textViewNextPrayer, tvTimePrayer;
     private ListView lvSynagogue;
     private String nextTimeT, tempNextTimePrayer;
     private Calendar currentTime = Calendar.getInstance();
-    private int hour, minutes, currentPrayer,counterLaunch, afterTimes;
+    private int hour, minutes, currentPrayer;
     private boolean flag;
     ArrayList<Prayer> mListPrayer = new ArrayList<>();
     ArrayList<String> mListSynagogue = new ArrayList<>();
     ArrayList<Prayer> allPrayers = new ArrayList<>();
-    //The next two variables are to keep the number of times the user enter to the app.
-    private SharedPreferences mPref, mPrefAfter ;
     //This final variable to send info to another activity
     final static String KIND_PRAYER = "com.yonatan.asusx541u.pacPrayerTime.kindPrayer";
     private DrawerLayout drawerLayout;
     LottieAnimationView animationView_prayer, animationView_clock, animationView_location;
     Menu menu;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         navigation();
         toolbar();
         nextPrayer("sahrit");
         checkAvailableNetwork();
         allPrayers();
-        mPref = getPreferences(Context.MODE_PRIVATE);
-        mPrefAfter = getPreferences(Context.MODE_PRIVATE);
         initAnimation();
     }
 
@@ -297,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             synagogueArrayAdapter.notifyDataSetChanged();
                             tvTimePrayer.setText(singlePrayer.getTime());
-                            textViewNextPrayer.setText(namePrayerToHeb(dataSnapshot.getKey()));
+                            //textViewNextPrayer.setText(namePrayerToHeb(dataSnapshot.getKey()));
                             return;
                         }
                     } else if (hour > currentTime.get(Calendar.HOUR_OF_DAY)) {
@@ -312,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                         tvTimePrayer.setText(singlePrayer.getTime());
                         synagogueArrayAdapter.notifyDataSetChanged();
                         flag = true;
-                        textViewNextPrayer.setText(namePrayerToHeb(dataSnapshot.getKey()));
+                        //textViewNextPrayer.setText(namePrayerToHeb(dataSnapshot.getKey()));
                         return;
                     }
                     currentPrayer++;
@@ -420,6 +423,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 Collections.sort(allPrayers);
+                initPrayersVP();
             }
 
             @Override
@@ -482,7 +486,7 @@ public class MainActivity extends AppCompatActivity {
                         String strTimeAtList = allPrayers.get(i).getTime();
                         int intTimeAtList = Integer.parseInt(((strTimeAtList.substring(0, strTimeAtList.indexOf(":"))) + (strTimeAtList.substring(strTimeAtList.indexOf(":") + 1))));
                         if (intTimeAtList > intTimeApeers) {
-                            updateFieldWhenUserClickNextAndPrev(i, flag);
+                            //updateFieldWhenUserClickNextAndPrev(i, flag);
                             return true;
                         }
                     }
@@ -501,7 +505,7 @@ public class MainActivity extends AppCompatActivity {
                         String strTimeAtList = allPrayers.get(i).getTime();
                         int intTimeAtList = Integer.parseInt(((strTimeAtList.substring(0, strTimeAtList.indexOf(":"))) + (strTimeAtList.substring(strTimeAtList.indexOf(":") + 1))));
                         if (intTimeApeersPrev > intTimeAtList) {
-                            updateFieldWhenUserClickNextAndPrev(i, flag);
+                            //updateFieldWhenUserClickNextAndPrev(i, flag);
                             return true;
                         }
                     }
@@ -511,15 +515,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public String namePrayerToHeb(String kindPrayer){
-        if(kindPrayer.equals("sahrit"))
-            return "שחרית";
-        else if (kindPrayer.equals("mincha"))
-            return "מנחה";
-        return "ערבית";
-    }
-
-    public void updateFieldWhenUserClickNextAndPrev(int i, String flag){
+   /* public void updateFieldWhenUserClickNextAndPrev(int i, String flag){
         textViewNextPrayer.setText(namePrayerToHeb(allPrayers.get(i).getKind()));
         tvTimePrayer.setText(allPrayers.get(i).getTime());
         mListSynagogue.clear();
@@ -546,6 +542,58 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         synagogueArrayAdapter.notifyDataSetChanged();
+    }*/
+
+    private void initPrayersVP(){
+        calculateSameTimeOfPrayers();
+        int currentPrayer = getCurrentPrayerAndCalculateSameTimeOfPrayers();
+        binding.prayersVP.setAdapter(new PrayersViewPagerAdapter(allPrayers, this));
+        binding.prayersVP.setPageMargin(16);
+        binding.prayersVP.setCurrentItem(currentPrayer);
     }
 
+    private int getCurrentPrayerAndCalculateSameTimeOfPrayers() {
+        currentPrayer = 0;
+        for (Prayer singlePrayer : allPrayers) {
+            nextTimeT = singlePrayer.getTime();
+            hour = Integer.parseInt(nextTimeT.substring(0, nextTimeT.indexOf(":")));
+            minutes = Integer.parseInt(nextTimeT.substring(nextTimeT.indexOf(":") + 1));
+            mListSynagogue.clear();
+            if (hour == currentTime.get(Calendar.HOUR_OF_DAY)) {
+                if (minutes >= currentTime.get(Calendar.MINUTE)) {
+                    return currentPrayer++;
+                }
+            } else if (hour > currentTime.get(Calendar.HOUR_OF_DAY)) {
+                return currentPrayer++;
+            }
+            currentPrayer++;
+        }
+        return 0;
+    }
+
+    private void calculateSameTimeOfPrayers(){
+        List<Prayer> prayerListToRemove = new ArrayList<>();
+        for (int i=0; i <allPrayers.size(); i++) {
+            nextTimeT = allPrayers.get(i).getTime();
+            allPrayers.get(i).getSynagogueList().add(allPrayers.get(i).getPlace());
+            /*Add all places of prayer at the same time */
+            int j = 0;
+            while (allPrayers.size() > (i + 1 + j)) {
+                tempNextTimePrayer = allPrayers.get(i + 1 + j).getTime();
+                if (tempNextTimePrayer.equals(nextTimeT)) {
+                    allPrayers.get(i).getSynagogueList().add(allPrayers.get(i + 1 + j).getPlace());
+                    j++;
+                    prayerListToRemove.add(allPrayers.get(i + 1 + j));
+                }else {break;}
+            }
+        }
+        allPrayers.removeAll(prayerListToRemove);
+    }
+
+    @Override
+    public void onClickPrayer(@NotNull TypePrayer typePrayer) {
+        Intent i = new Intent(MainActivity.this, PrayersActivity.class);
+        i.putExtra(KIND_PRAYER, typePrayer.getType());
+        startActivity(i);
+    }
 }

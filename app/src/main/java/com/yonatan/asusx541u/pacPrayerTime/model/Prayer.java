@@ -2,6 +2,11 @@ package com.yonatan.asusx541u.pacPrayerTime.model;
 
 import android.support.annotation.NonNull;
 
+import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by asusX541u on 18/12/2017.
  */
@@ -10,6 +15,7 @@ public class Prayer implements Comparable<Prayer>{
     private String place;
     private String time;
     private String kind;
+    private List<String> synagogueList = new ArrayList<>();
 
     public Prayer(String place, String time) {
         this.place = place;
@@ -37,6 +43,16 @@ public class Prayer implements Comparable<Prayer>{
         return kind;
     }
 
+    public TypePrayer getTypePrayer(){
+        switch (kind){
+            case "sahrit":
+                return TypePrayer.SAHRIT;
+            case "mincha":
+                return TypePrayer.MINCHA;
+        }
+        return TypePrayer.ARVIT;
+    }
+
     public void setKind(String kind) {
         this.kind = kind;
     }
@@ -62,4 +78,11 @@ public class Prayer implements Comparable<Prayer>{
         return cTime - newTime;
     }
 
+    public List<String> getSynagogueList() {
+        return synagogueList;
+    }
+
+    public void setSynagogueList(List<String> synagogueList) {
+        this.synagogueList = synagogueList;
+    }
 }

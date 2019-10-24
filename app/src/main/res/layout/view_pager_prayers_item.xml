@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="prayersVPadapter"
+            type="com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="20dp"
+        android:onClick="@{_ -> prayersVPadapter.onClickItem(position)}">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tvPrayerVPItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{prayersVPadapter.getPrayer(position)}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="תפילת ערבית" />
+
+            <TextView
+                android:id="@+id/tvTimeVPItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@{prayersVPadapter.getTimePrayer(position)}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPrayerVPItem"
+                tools:text="בשעה 21:00" />
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adapter="@{prayersVPadapter.getAdapterSynagogue(position)}"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvPrayerVPItem"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/item_synagogue_grid_view" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+</layout>
