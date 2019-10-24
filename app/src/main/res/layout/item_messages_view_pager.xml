@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="MessagesViewPagerAdapter"
+            type="com.yonatan.asusx541u.pacPrayerTime.adapters.MessagesViewPagerAdapter" />
+    </data>
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ivMessagesVP"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ImageView>
+</layout>

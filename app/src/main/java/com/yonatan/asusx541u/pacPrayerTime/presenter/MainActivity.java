@@ -27,9 +27,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
+import com.yonatan.asusx541u.pacPrayerTime.adapters.MessagesViewPagerAdapter;
+import com.yonatan.asusx541u.pacPrayerTime.adapters.NewsAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
+import com.yonatan.asusx541u.pacPrayerTime.model.News;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 
@@ -38,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +75,65 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         checkAvailableNetwork();
         allPrayers();
         initAnimation();
+        initMessagesVP();
+        initRecyclerNews();
+    }
+
+    private void initRecyclerNews() {
+        ArrayList<News> newsArrayList = new ArrayList<>();
+        final ArrayList<String>[] linkImageArrayList = new ArrayList[]{new ArrayList<>()};
+        NewsAdapter newsAdapter =  new NewsAdapter(newsArrayList, this);
+        binding.rvNews.setAdapter(newsAdapter);
+        FirebaseDatabase.getInstance().getReference().child("news").
+        addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Map> map = (ArrayList<Map>) dataSnapshot.getValue();
+                newsArrayList.clear();
+                for (Map entry: map){
+                    if (entry != null){
+                        Map<String, String> mapLinkImage = (Map<String, String>) entry.get("link_images");
+                        linkImageArrayList[0] = new ArrayList<>();
+                        for(Map.Entry<String,String> imageEntry : mapLinkImage.entrySet()){
+                            linkImageArrayList[0].add(imageEntry.getValue());
+                        }
+                        //Date currDate = new Date();
+                        News news = new News(
+                                linkImageArrayList[0],
+                                (String) entry.get("title"),
+                                (String) entry.get("content"),
+                                (String) entry.get("name_writer"),
+                                (String) entry.get("date_create"),
+                                (String) entry.get("time_create")
+                        );
+                        newsArrayList.add(news);
+                    }
+                }
+                newsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void initMessagesVP() {
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgMzd-_UlsaaXH_lbKVPxwxtQiYfQXdGZz12aP_CF6bE7KYfSL&s");
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFZnW-2_BNDAcyYCz-37I6YNR_ET9vr5I3L4jt40fx7pPw8AjW&s");
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBpy1B9KEm-8jyF15_yO9aKY4xFzSvJgfFBHMaAjC_4mP1r8Uthw&s");
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8C8Q28M-9aPfG_GUVqsEKQWiuvCoRk0wKyekxq0kfDnAoEpkgQ&s");
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMKD3hgGqTvtVyIVRfDIa3DZ_JzGOsn8HghdRqZOaOqXiXtqgw&s");
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdIUbKKUpjMqvtefOyZZeyaUXasT5kAtFQJAsNToIaJ6nae8v3&s");
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqyjTdhAG-VmkspJuVBHbdRooZPEud71DnvmrOMZ-dZSnHUcmE&s");
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST5Ti8KVxILQ4LPn0fmj44oBG1e-C1mylA0fJHR2jEbNhUeT5CMA&s");
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQL8-AHiAuglP7CWRwcj9BKRRMKRg_G-rbKdDCBRCiBw0QkKvGcog&s");
+        strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSm5yoADNQpxT0-IFGGDcsw1NoTvUgep9toIRmMyfBSq9aasEwrtg&s");
+
+        binding.messageVP.setAdapter(new MessagesViewPagerAdapter(strings));
+        binding.messageVP.setPageMargin(16);
     }
 
     private void initAnimation() {
