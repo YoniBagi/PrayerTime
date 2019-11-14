@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -133,7 +134,8 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSm5yoADNQpxT0-IFGGDcsw1NoTvUgep9toIRmMyfBSq9aasEwrtg&s");
 
         binding.messageVP.setAdapter(new MessagesViewPagerAdapter(strings));
-        binding.messageVP.setPageMargin(16);
+        binding.messageVP.setPageMargin(5);
+        binding.appBarMainActivity.setOutlineProvider(null);
     }
 
     private void initAnimation() {

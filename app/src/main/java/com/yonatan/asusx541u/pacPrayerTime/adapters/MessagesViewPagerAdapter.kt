@@ -1,5 +1,6 @@
 package com.yonatan.asusx541u.pacPrayerTime.adapters
 
+import android.content.res.Resources
 import android.databinding.DataBindingUtil
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
@@ -27,7 +28,7 @@ class MessagesViewPagerAdapter(private val listImages: ArrayList<String>): Pager
                 false)
         binding.messagesViewPagerAdapter = this
         container?.addView(binding.root)
-        Picasso.with(container?.context).load(listImages[position]).resize(360, 220).into(binding.ivMessagesVP)
+        Picasso.with(container?.context).load(listImages[position]).resize((150 * Resources.getSystem().displayMetrics.density).toInt(), 220).into(binding.ivMessagesVP)
         return binding.root
     }
 

@@ -32,6 +32,8 @@ class PrayersViewPagerAdapter(
                 false)
         binding.prayersVPadapter = this
         binding.position = position
+        binding.prayer = "תפילת "
+        binding.atTime = "בשעה "
         container?.addView(binding.root)
         return binding.root
     }
