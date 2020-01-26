@@ -17,7 +17,8 @@
         android:animationCache="false"
         android:background="@color/background"
         android:fitsSystemWindows="true"
-        tools:context="com.yonatan.asusx541u.pacPrayerTime.presenter.MainActivity">
+        tools:context="com.yonatan.asusx541u.pacPrayerTime.presenter.MainActivity"
+        android:layoutDirection="rtl">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

@@ -3,6 +3,7 @@ package com.yonatan.asusx541u.pacPrayerTime.adapters
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.yonatan.asusx541u.pacPrayerTime.R
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ItemSynagogueGridViewBinding
@@ -24,12 +25,15 @@ class SynagogueGridViewAdapter(private val listSynagogue : ArrayList<String>) : 
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.onBind(listSynagogue[position])
+        holder?.onBind(listSynagogue[position], position)
     }
 
     inner class ViewHolder(private val binding: ItemSynagogueGridViewBinding) : RecyclerView.ViewHolder(binding.root){
-        fun onBind(synagogue: String) {
+        fun onBind(synagogue: String, position: Int) {
             binding.synagogue = synagogue
+            if (position == listSynagogue.size-1){
+                binding.viewDiv.visibility = View.INVISIBLE
+            }
         }
 
     }

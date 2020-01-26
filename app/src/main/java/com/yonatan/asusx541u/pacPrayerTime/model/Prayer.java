@@ -1,6 +1,7 @@
 package com.yonatan.asusx541u.pacPrayerTime.model;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
 
@@ -76,6 +77,15 @@ public class Prayer implements Comparable<Prayer>{
         //int minutes = (nextTime.substring(nextTime.indexOf(":") + 1));
 
         return cTime - newTime;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {return true;}
+        if (!(obj instanceof Prayer)) {return false;}
+        String timeToComp = ((Prayer)obj).getTime();
+        return TextUtils.equals(timeToComp, this.time) &&
+                TextUtils.equals(((Prayer)obj).place, this.place);
     }
 
     public List<String> getSynagogueList() {

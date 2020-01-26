@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,7 +42,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -611,13 +610,12 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
 
     private void initPrayersVP(){
         calculateSameTimeOfPrayers();
-        int currentPrayer = getCurrentPrayerAndCalculateSameTimeOfPrayers();
         binding.prayersVP.setAdapter(new PrayersViewPagerAdapter(allPrayers, this));
         binding.prayersVP.setPageMargin(16);
-        binding.prayersVP.setCurrentItem(currentPrayer);
+        binding.prayersVP.setCurrentItem(getCurrentPrayer());
     }
 
-    private int getCurrentPrayerAndCalculateSameTimeOfPrayers() {
+    private int getCurrentPrayer() {
         currentPrayer = 0;
         for (Prayer singlePrayer : allPrayers) {
             nextTimeT = singlePrayer.getTime();
@@ -638,18 +636,16 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
 
     private void calculateSameTimeOfPrayers(){
         List<Prayer> prayerListToRemove = new ArrayList<>();
-        for (int i=0; i <allPrayers.size(); i++) {
-            nextTimeT = allPrayers.get(i).getTime();
-            allPrayers.get(i).getSynagogueList().add(allPrayers.get(i).getPlace());
-            /*Add all places of prayer at the same time */
-            int j = 0;
-            while (allPrayers.size() > (i + 1 + j)) {
-                tempNextTimePrayer = allPrayers.get(i + 1 + j).getTime();
-                if (tempNextTimePrayer.equals(nextTimeT)) {
-                    allPrayers.get(i).getSynagogueList().add(allPrayers.get(i + 1 + j).getPlace());
-                    j++;
-                    prayerListToRemove.add(allPrayers.get(i + 1 + j));
-                }else {break;}
+          String time;
+          int mainPrayer = 0;
+        for (int i=0; i<allPrayers.size(); i++){
+            time = allPrayers.get(i).getTime();
+            if (i+1<allPrayers.size() && TextUtils.equals(time, allPrayers.get(i+1).getTime())){
+                allPrayers.get(mainPrayer).getSynagogueList().add(allPrayers.get(i+1).getPlace());
+                prayerListToRemove.add(allPrayers.get(i+1));
+            }else {
+                allPrayers.get(mainPrayer).getSynagogueList().add(allPrayers.get(mainPrayer).getPlace());
+                mainPrayer = i+1;
             }
         }
         allPrayers.removeAll(prayerListToRemove);
