@@ -13,11 +13,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,9 +31,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.MessagesViewPagerAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.NewsAdapter;
+import com.yonatan.asusx541u.pacPrayerTime.adapters.OnClickMessageCallBack;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
@@ -45,7 +52,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements PrayersViewPagerAdapter.ClickPrayerCallBack {
+public class MainActivity extends AppCompatActivity implements PrayersViewPagerAdapter.ClickPrayerCallBack, NewsAdapter.OnClickNewsCallBack, OnClickMessageCallBack {
 
     private DatabaseReference mDataBase;
     private TextView textViewNextPrayer, tvTimePrayer;
@@ -82,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     private void initRecyclerNews() {
         ArrayList<News> newsArrayList = new ArrayList<>();
         final ArrayList<String>[] linkImageArrayList = new ArrayList[]{new ArrayList<>()};
-        NewsAdapter newsAdapter =  new NewsAdapter(newsArrayList, this);
+        NewsAdapter newsAdapter =  new NewsAdapter(newsArrayList, this, this);
         binding.rvNews.setAdapter(newsAdapter);
         FirebaseDatabase.getInstance().getReference().child("news").
         addValueEventListener(new ValueEventListener() {
@@ -132,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQL8-AHiAuglP7CWRwcj9BKRRMKRg_G-rbKdDCBRCiBw0QkKvGcog&s");
         strings.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSm5yoADNQpxT0-IFGGDcsw1NoTvUgep9toIRmMyfBSq9aasEwrtg&s");
 
-        binding.messageVP.setAdapter(new MessagesViewPagerAdapter(strings));
+        binding.messageVP.setAdapter(new MessagesViewPagerAdapter(strings, this));
         binding.messageVP.setPageMargin(5);
         binding.appBarMainActivity.setOutlineProvider(null);
     }
@@ -508,17 +515,18 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
 
     public void toolbar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("המניין הקרוב");
+        actionBar.setTitle("שורק נט");
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        UiUtils.INSTANCE.centerTitle(this);
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.times_prayers, menu);
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -656,5 +664,19 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         Intent i = new Intent(MainActivity.this, PrayersActivity.class);
         i.putExtra(KIND_PRAYER, typePrayer.getType());
         startActivity(i);
+    }
+
+    @Override
+    public void onClickNewsListener(News news) {
+        Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+        intent.putExtra(Consts.News, news);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClickMessageListener(@NonNull String linkImage) {
+        Intent intent = new Intent(MainActivity.this, ImagePopUp.class);
+        intent.putExtra(Consts.LINK_IMAGE, linkImage);
+        startActivity(intent);
     }
 }

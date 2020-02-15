@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yonatan.asusx541u.pacPrayerTime.presenter.AdActivity">
-
-    <ImageView
-        android:id="@+id/ivAd"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+    tools:context=".presenter.ImagePopUp"
+    android:background="@android:color/black">
+<uk.co.senab.photoview.PhotoView
+    android:id="@+id/photoViewZoom"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:src="@drawable/newspaper"/>
 
 </android.support.constraint.ConstraintLayout>

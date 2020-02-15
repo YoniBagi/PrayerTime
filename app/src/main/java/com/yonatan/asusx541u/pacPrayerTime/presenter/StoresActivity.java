@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.yonatan.asusx541u.pacPrayerTime.R;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.StoreAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.model.Store;
 
@@ -86,11 +87,12 @@ public class StoresActivity extends AppCompatActivity {
     }
 
     private void toolbar() {
+        UiUtils.INSTANCE.centerTitle(this);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(name_category);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-    public  boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item){
         finish();
         return true;
     }

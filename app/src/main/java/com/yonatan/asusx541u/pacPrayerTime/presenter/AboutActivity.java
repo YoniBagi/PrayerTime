@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yonatan.asusx541u.pacPrayerTime.R;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -79,6 +80,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     public void toolbar(){
+        UiUtils.INSTANCE.centerTitle(this);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("אודות");
         actionBar.setDisplayHomeAsUpEnabled(true);

@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -17,6 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.yonatan.asusx541u.pacPrayerTime.R;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
+
+import java.util.ArrayList;
 
 public class SplashScreen extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 4500;
@@ -26,6 +32,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        UiUtils.INSTANCE.centerTitle(this);
 
         //The Firebase Realtime Database client automatically downloads the data at these locations and keeps it in sync even if the reference has no active listeners.
         //And now he get the data faster, it's mean that while the animation works I pull the information.
@@ -38,18 +45,6 @@ public class SplashScreen extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final String link_advertising = (String) dataSnapshot.getValue();
                 Picasso.with(getApplicationContext()).load(link_advertising).into(ivIcon);
-                ivIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        flag = true;
-                        Intent mainIntent = new Intent(SplashScreen.this, NewsActivity.class);
-                        startActivity(mainIntent);
-                        Intent intent = new Intent(SplashScreen.this, AdActivity.class);
-                        intent.putExtra("LINK_AD", link_advertising);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
             }
 
             @Override
@@ -68,7 +63,6 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 flag = true;
-//                Intent intent = new Intent(SplashScreen.this, NewsActivity.class);
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -86,8 +80,6 @@ public class SplashScreen extends AppCompatActivity {
                 @Override
                 public void run() {
                     if(!flag) {
-
-//                Intent intent = new Intent(SplashScreen.this, NewsActivity.class);
                         Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                         startActivity(intent);
                         finish();

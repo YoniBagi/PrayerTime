@@ -1,5 +1,6 @@
 package com.yonatan.asusx541u.pacPrayerTime.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Map;
  * Created by asusX541u on 23/05/2018.
  */
 
-public class News {
+public class News implements Serializable {
     ArrayList<String> link_image;
     String title;
     String content;

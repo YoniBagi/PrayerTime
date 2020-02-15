@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso
 import com.yonatan.asusx541u.pacPrayerTime.R
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ItemMessagesViewPagerBinding
 
-class MessagesViewPagerAdapter(private val listImages: ArrayList<String>): PagerAdapter() {
+class MessagesViewPagerAdapter(private val listImages: ArrayList<String>, val onClickMessageCallBack: OnClickMessageCallBack) : PagerAdapter() {
     override fun isViewFromObject(view: View?, `object`: Any?): Boolean {
         return view == `object`
     }
@@ -29,10 +29,15 @@ class MessagesViewPagerAdapter(private val listImages: ArrayList<String>): Pager
         binding.messagesViewPagerAdapter = this
         container?.addView(binding.root)
         Picasso.with(container?.context).load(listImages[position]).resize((150 * Resources.getSystem().displayMetrics.density).toInt(), 220).into(binding.ivMessagesVP)
+        binding.ivMessagesVP.setOnClickListener { onClickMessageCallBack.onClickMessageListener(listImages[position]) }
         return binding.root
     }
 
     override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
         container?.removeView(`object` as ImageView)
     }
+}
+
+public interface OnClickMessageCallBack {
+    fun onClickMessageListener(linkImage: String)
 }

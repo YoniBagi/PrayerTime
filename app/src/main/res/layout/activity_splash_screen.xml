@@ -12,36 +12,27 @@
         android:id="@+id/l_Anim_Esc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:lottie_fileName="x_pop.json"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
         android:layout_weight="5"
-        app:lottie_colorFilter="@color/colorPrimary"/>
-    <!--<ImageView
-        android:id="@+id/ivEsc"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="8"
-        app:srcCompat="@drawable/ic_skip" />-->
-
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/colorPrimary"
+        app:lottie_fileName="x_pop.json"
+        app:lottie_loop="true" />
 
     <ImageView
         android:id="@+id/imageViewIcon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="2" />
 
-         />
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="5"
-        app:lottie_loop="true"
         app:lottie_autoPlay="true"
         app:lottie_fileName="material_wave_loading.json"
-        />
+        app:lottie_loop="true" />
 </LinearLayout>

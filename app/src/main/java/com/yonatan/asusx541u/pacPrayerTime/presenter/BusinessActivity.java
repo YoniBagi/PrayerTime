@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.yonatan.asusx541u.pacPrayerTime.R;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.BusinessAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.model.ItemCategory;
 
@@ -81,6 +82,7 @@ public class BusinessActivity extends AppCompatActivity {
     }
 
     private void toolbar() {
+        UiUtils.INSTANCE.centerTitle(this);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("עסקים מקומיים");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

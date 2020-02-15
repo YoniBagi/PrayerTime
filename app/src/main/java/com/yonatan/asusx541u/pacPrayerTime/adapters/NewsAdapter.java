@@ -1,6 +1,7 @@
 package com.yonatan.asusx541u.pacPrayerTime.adapters;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +27,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     ArrayList<News> newsArrayList;
     Context context;
-    public NewsAdapter(ArrayList<News> mNewsArrayList, Context mContext){
+    OnClickNewsCallBack mOnClickNewsCallBack;
+
+    public NewsAdapter(ArrayList<News> mNewsArrayList, Context mContext, OnClickNewsCallBack onClickNewsCallBack){
         this.newsArrayList = mNewsArrayList;
         this.context = mContext;
+        mOnClickNewsCallBack = onClickNewsCallBack;
     }
 
     @Override
@@ -48,6 +52,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         //setAnimation(holder.itemView, position);
         //DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
         holder.tv_date_article_news.setText(sinNews.getDate_create());
+        holder.rootNews.setOnClickListener(view -> {
+            mOnClickNewsCallBack.onClickNewsListener(newsArrayList.get(position));
+        });
     }
   /*  private void setAnimation(View itemView, int position) {
         int lastPosition = -1;
@@ -67,6 +74,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_news;
         TextView tv_title_news, tv_content_news, tv_writer_news, tv_time_article_news, tv_date_article_news;
+        ConstraintLayout rootNews;
         public ViewHolder(View itemView) {
             super(itemView);
             iv_news = itemView.findViewById(R.id.iv_news);
@@ -75,6 +83,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             tv_writer_news = itemView.findViewById(R.id.tv_writer_news);
             tv_time_article_news = itemView.findViewById(R.id.tv_time_article_news);
             tv_date_article_news = itemView.findViewById(R.id.tv_date_article_news);
+            rootNews = itemView.findViewById(R.id.rootRowNews);
         }
+    }
+
+    public interface OnClickNewsCallBack{
+        void onClickNewsListener(News news);
     }
 }

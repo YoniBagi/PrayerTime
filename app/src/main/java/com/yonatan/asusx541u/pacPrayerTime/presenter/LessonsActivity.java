@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.yonatan.asusx541u.pacPrayerTime.R;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 import com.yonatan.asusx541u.pacPrayerTime.model.Lessons;
 
 import java.util.ArrayList;
@@ -129,6 +130,7 @@ public class LessonsActivity extends AppCompatActivity {
     }
 
     public void toolbar(){
+        UiUtils.INSTANCE.centerTitle(this);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(name_day);
         actionBar.setDisplayHomeAsUpEnabled(true);
