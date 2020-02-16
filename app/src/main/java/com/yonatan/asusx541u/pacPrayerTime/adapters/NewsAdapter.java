@@ -47,8 +47,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         Picasso.with(context).load(sinNews.getLink_image().get(0)).resize(540,400).into(holder.iv_news);
         holder.tv_title_news.setText(sinNews.getTitle());
         holder.tv_content_news.setText(sinNews.getContent());
-        holder.tv_writer_news.setText(sinNews.getWriter());
-        holder.tv_time_article_news.setText(sinNews.getTime_create());
         //setAnimation(holder.itemView, position);
         //DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
         holder.tv_date_article_news.setText(sinNews.getDate_create());
@@ -73,15 +71,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_news;
-        TextView tv_title_news, tv_content_news, tv_writer_news, tv_time_article_news, tv_date_article_news;
+        TextView tv_title_news, tv_content_news, tv_date_article_news;
         ConstraintLayout rootNews;
         public ViewHolder(View itemView) {
             super(itemView);
             iv_news = itemView.findViewById(R.id.iv_news);
             tv_title_news = itemView.findViewById(R.id.tv_title_news);
             tv_content_news = itemView.findViewById(R.id.tv_content_news);
-            tv_writer_news = itemView.findViewById(R.id.tv_writer_news);
-            tv_time_article_news = itemView.findViewById(R.id.tv_time_article_news);
             tv_date_article_news = itemView.findViewById(R.id.tv_date_article_news);
             rootNews = itemView.findViewById(R.id.rootRowNews);
         }

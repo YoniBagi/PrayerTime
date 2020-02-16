@@ -30,8 +30,6 @@ class NewsActivity : AppCompatActivity() {
         setImage()
         tvTitleNews?.text = mNews.title
         tvContent?.text = mNews.content
-        tv_writer_news?.text = "${mNews.writer} | "
-        tv_time_article_news?.text = "${mNews.time_create} | "
         tv_date_article_news?.text = mNews.date_create
     }
 

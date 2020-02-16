@@ -106,28 +106,33 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<Map> map = (ArrayList<Map>) dataSnapshot.getValue();
-                newsArrayList.clear();
-                for (Map entry: map){
-                    if (entry != null){
-                        Map<String, String> mapLinkImage = (Map<String, String>) entry.get("link_images");
-                        linkImageArrayList[0] = new ArrayList<>();
-                        for(Map.Entry<String,String> imageEntry : mapLinkImage.entrySet()){
-                            linkImageArrayList[0].add(imageEntry.getValue());
+                try {
+                    ArrayList<Map> map = (ArrayList<Map>) dataSnapshot.getValue();
+                    newsArrayList.clear();
+                    for (Map entry: map){
+                        if (entry != null){
+                            Map<String, String> mapLinkImage = (Map<String, String>) entry.get("link_images");
+                            linkImageArrayList[0] = new ArrayList<>();
+                            for(Map.Entry<String,String> imageEntry : mapLinkImage.entrySet()){
+                                linkImageArrayList[0].add(imageEntry.getValue());
+                            }
+                            //Date currDate = new Date();
+                            News news = new News(
+                                    linkImageArrayList[0],
+                                    (String) entry.get("title"),
+                                    (String) entry.get("content"),
+                                    (String) entry.get("name_writer"),
+                                    (String) entry.get("date_create"),
+                                    (String) entry.get("time_create")
+                            );
+                            newsArrayList.add(news);
                         }
-                        //Date currDate = new Date();
-                        News news = new News(
-                                linkImageArrayList[0],
-                                (String) entry.get("title"),
-                                (String) entry.get("content"),
-                                (String) entry.get("name_writer"),
-                                (String) entry.get("date_create"),
-                                (String) entry.get("time_create")
-                        );
-                        newsArrayList.add(news);
                     }
+                    newsAdapter.notifyDataSetChanged();
+                }catch (Exception e){
+
                 }
-                newsAdapter.notifyDataSetChanged();
+
             }
 
             @Override
