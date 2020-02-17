@@ -1,8 +1,8 @@
 package com.yonatan.asusx541u.pacPrayerTime.adapters
 
-import android.databinding.DataBindingUtil
-import android.support.v4.view.PagerAdapter
-import android.support.v7.widget.CardView
+import androidx.databinding.DataBindingUtil
+import androidx.viewpager.widget.PagerAdapter
+import androidx.cardview.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +16,7 @@ import kotlin.collections.ArrayList
 class PrayersViewPagerAdapter(
         private val allPrayers: ArrayList<Prayer>,
         private val clickPrayerCallBack: ClickPrayerCallBack) : PagerAdapter() {
-    override fun isViewFromObject(view: View?, myObject: Any?): Boolean {
+    override fun isViewFromObject(view: View, myObject: Any): Boolean {
         return view == myObject
     }
 
@@ -24,9 +24,9 @@ class PrayersViewPagerAdapter(
         return allPrayers.size
     }
 
-    override fun instantiateItem(container: ViewGroup?, position: Int): Any {
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
         var binding = DataBindingUtil.inflate<ViewPagerPrayersItemBinding>(
-                LayoutInflater.from(container?.context),
+                LayoutInflater.from(container.context),
                 R.layout.view_pager_prayers_item,
                 container,
                 false)
@@ -34,7 +34,7 @@ class PrayersViewPagerAdapter(
         binding.position = position
         binding.prayer = "תפילת "
         binding.atTime = "בשעה "
-        container?.addView(binding.root)
+        container.addView(binding.root)
         return binding.root
     }
 
@@ -46,8 +46,8 @@ class PrayersViewPagerAdapter(
         return "ערבית"
     }
 
-    override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
-        container?.removeView(`object` as CardView)
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        container.removeView(`object` as androidx.cardview.widget.CardView)
     }
 
     fun getPrayer(position: Int): String{

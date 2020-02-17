@@ -1,11 +1,10 @@
 package com.yonatan.asusx541u.pacPrayerTime.presenter;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 
-import com.google.android.youtube.player.internal.d;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 
 public class PopActivity extends Activity {
