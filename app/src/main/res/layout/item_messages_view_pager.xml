@@ -11,7 +11,8 @@
     <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/ivMessagesVP"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scaleType="fitXY">
 
     </ImageView>
 </layout>

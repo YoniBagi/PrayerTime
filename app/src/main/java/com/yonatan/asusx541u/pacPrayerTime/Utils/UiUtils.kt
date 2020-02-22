@@ -1,5 +1,6 @@
 package com.yonatan.asusx541u.pacPrayerTime.Utils
 
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
@@ -8,6 +9,8 @@ import android.view.ViewGroup
 
 
 object UiUtils {
+    val Float.dp: Int get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+    val Float.px: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
     fun centerTitle(activity: AppCompatActivity) {
         val textViews: ArrayList<View> = ArrayList()

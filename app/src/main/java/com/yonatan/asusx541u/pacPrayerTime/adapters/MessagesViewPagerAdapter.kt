@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import com.yonatan.asusx541u.pacPrayerTime.R
+import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils.px
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ItemMessagesViewPagerBinding
 
 class MessagesViewPagerAdapter(private val listImages: ArrayList<String>, val onClickMessageCallBack: OnClickMessageCallBack) : PagerAdapter() {
@@ -29,7 +30,7 @@ class MessagesViewPagerAdapter(private val listImages: ArrayList<String>, val on
                 false)
         binding.messagesViewPagerAdapter = this
         container?.addView(binding.root)
-        Picasso.with(container?.context).load(listImages[position]).resize((150 * Resources.getSystem().displayMetrics.density).toInt(), 220).into(binding.ivMessagesVP)
+        Picasso.with(container?.context).load(listImages[position]).into(binding.ivMessagesVP)
         binding.ivMessagesVP.setOnClickListener { onClickMessageCallBack.onClickMessageListener(listImages[position]) }
         return binding.root
     }
