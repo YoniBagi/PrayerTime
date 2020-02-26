@@ -19,7 +19,7 @@ object NetworkManager {
     }
 
     private fun fetchAds() {
-        mDataReference.child("ads").addValueEventListener(object : ValueEventListener{
+        mDataReference.child("adsSorek").addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError?) {
 
             }
