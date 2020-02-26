@@ -16,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,38 +106,22 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
 
     private void initRecyclerNews() {
         ArrayList<News> newsArrayList = new ArrayList<>();
-        final ArrayList<String>[] linkImageArrayList = new ArrayList[]{new ArrayList<>()};
         NewsAdapter newsAdapter =  new NewsAdapter(newsArrayList, this, this);
         binding.rvNews.setAdapter(newsAdapter);
-        FirebaseDatabase.getInstance().getReference().child("news").
+        FirebaseDatabase.getInstance().getReference().child("newsSorek").
         addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    ArrayList<Map> map = (ArrayList<Map>) dataSnapshot.getValue();
                     newsArrayList.clear();
-                    for (Map entry: map){
-                        if (entry != null){
-                            Map<String, String> mapLinkImage = (Map<String, String>) entry.get("link_images");
-                            linkImageArrayList[0] = new ArrayList<>();
-                            for(Map.Entry<String,String> imageEntry : mapLinkImage.entrySet()){
-                                linkImageArrayList[0].add(imageEntry.getValue());
-                            }
-                            //Date currDate = new Date();
-                            News news = new News(
-                                    linkImageArrayList[0],
-                                    (String) entry.get("title"),
-                                    (String) entry.get("content"),
-                                    (String) entry.get("name_writer"),
-                                    (String) entry.get("date_create"),
-                                    (String) entry.get("time_create")
-                            );
-                            newsArrayList.add(news);
-                        }
+                    for (DataSnapshot itemDataSnapshot: dataSnapshot.getChildren()){
+                        News news = itemDataSnapshot.getValue(News.class);
+                        newsArrayList.add(news);
                     }
                     newsAdapter.notifyDataSetChanged();
                 }catch (Exception e){
-
+                    if (e.getMessage() !=null)
+                    Log.d("Request News:", e.getMessage());
                 }
 
             }

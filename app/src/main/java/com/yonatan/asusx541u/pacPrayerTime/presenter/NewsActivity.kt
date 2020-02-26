@@ -36,11 +36,11 @@ class NewsActivity : AppCompatActivity() {
     private fun setImage() {
         ivNews?.let {
             Picasso.with(this)
-                    .load(mNews.link_image[0])
+                    .load(mNews.link_image)
                     .into(it)
         }
 
-        ivNews?.setOnClickListener { drillToImagePopup(mNews.link_image[0]) }
+        ivNews?.setOnClickListener { drillToImagePopup(mNews.link_image) }
     }
 
     private fun drillToImagePopup(linkImage: String?) {

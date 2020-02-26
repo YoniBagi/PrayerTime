@@ -26,8 +26,13 @@ object NetworkManager {
 
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 adsList.clear()
-                (dataSnapshot?.value as ArrayList<String>).filterNotNullTo(adsList)
-                mDataListener?.adsCallback()
+                dataSnapshot?.let {
+                    for (dataSnap in it.children){
+                        val item = dataSnap.getValue(String::class.java)
+                        adsList.add(item)
+                    }
+                    mDataListener?.adsCallback()
+                }
             }
 
         })

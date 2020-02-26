@@ -40,7 +40,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         News sinNews = newsArrayList.get(position);
-        Picasso.with(context).load(sinNews.getLink_image().get(0)).resize(540,400).into(holder.iv_news);
+        Picasso.with(context).load(sinNews.getLink_image()).resize(540,300).into(holder.iv_news);
         holder.tv_title_news.setText(sinNews.getTitle());
         holder.tv_content_news.setText(sinNews.getContent());
         //setAnimation(holder.itemView, position);

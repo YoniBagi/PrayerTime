@@ -10,20 +10,23 @@ import java.util.Map;
  */
 
 public class News implements Serializable {
-    ArrayList<String> link_image;
-    String title;
-    String content;
-    String writer;
-    String date_create;
-    String time_create;
+    private String link_image;
+    private String title;
+    private String content;
+    private String writer;
+    private String date_create;
+    private String time_create;
 
-    public News(ArrayList<String> link_image, String title, String content, String writer, String date_create, String time_create) {
+    public News(String link_image, String title, String content, String writer, String date_create, String time_create) {
         this.link_image = link_image;
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.date_create = date_create;
         this.time_create = time_create;
+    }
+
+    public News() {
     }
 
     public void setDate_create(String date_create) {
@@ -47,11 +50,11 @@ public class News implements Serializable {
     }
 
 
-    public ArrayList<String> getLink_image() {
+    public String getLink_image() {
         return link_image;
     }
 
-    public void setLink_image(ArrayList<String> link_image) {
+    public void setLink_image(String link_image) {
         this.link_image = link_image;
     }
 
