@@ -55,7 +55,7 @@ class NewsActivity : AppCompatActivity() {
         centerTitle(this)
         val actionBar = supportActionBar
         actionBar!!.setDisplayHomeAsUpEnabled(true)
-        actionBar.title = "חדשות"
+        actionBar.title = "חדשות שורק נט"
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

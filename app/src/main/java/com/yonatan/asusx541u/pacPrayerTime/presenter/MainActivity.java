@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     LottieAnimationView animationView_prayer, animationView_clock, animationView_location;
     Menu menu;
     private ActivityMainBinding binding;
+    private MessagesViewPagerAdapter messagesViewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +135,8 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     }
 
     private void initMessagesVP() {
-        binding.messageVP.setAdapter(new MessagesViewPagerAdapter(NetworkManager.INSTANCE.getAllAds(), this));
+       messagesViewPagerAdapter = new MessagesViewPagerAdapter(NetworkManager.INSTANCE.getAllAds(), this);
+        binding.messageVP.setAdapter(messagesViewPagerAdapter);
         binding.messageVP.setPageMargin(16);
         //binding.appBarMainActivity.setOutlineProvider(null);
     }
@@ -302,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         super.onResume();
         setAdsListener();
         nextPrayer("sahrit");
+        messagesViewPagerAdapter.updateVP(NetworkManager.INSTANCE.getAllAds());
     }
 
 
@@ -678,7 +681,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
 
     @Override
     public void adsCallback() {
-        initMessagesVP();
+        messagesViewPagerAdapter.updateVP(NetworkManager.INSTANCE.getAllAds());
     }
 
     @Override

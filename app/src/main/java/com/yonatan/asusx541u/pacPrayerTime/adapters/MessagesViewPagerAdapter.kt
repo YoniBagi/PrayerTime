@@ -1,18 +1,17 @@
 package com.yonatan.asusx541u.pacPrayerTime.adapters
 
-import android.content.res.Resources
-import androidx.databinding.DataBindingUtil
-import androidx.viewpager.widget.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.databinding.DataBindingUtil
+import androidx.viewpager.widget.PagerAdapter
 import com.squareup.picasso.Picasso
 import com.yonatan.asusx541u.pacPrayerTime.R
-import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils.px
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ItemMessagesViewPagerBinding
 
-class MessagesViewPagerAdapter(private val listImages: ArrayList<String>, val onClickMessageCallBack: OnClickMessageCallBack) : PagerAdapter() {
+
+class MessagesViewPagerAdapter(private var listImages: ArrayList<String>, val onClickMessageCallBack: OnClickMessageCallBack) : PagerAdapter() {
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view == `object`
@@ -38,8 +37,17 @@ class MessagesViewPagerAdapter(private val listImages: ArrayList<String>, val on
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as ImageView)
     }
+
+    fun updateVP(allAds: ArrayList<String>) {
+        listImages = allAds
+        notifyDataSetChanged()
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+        return POSITION_NONE
+    }
 }
 
-public interface OnClickMessageCallBack {
+interface OnClickMessageCallBack {
     fun onClickMessageListener(linkImage: String)
 }
