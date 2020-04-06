@@ -1,36 +1,36 @@
 package com.yonatan.asusx541u.pacPrayerTime.model;
 
+import com.yonatan.asusx541u.pacPrayerTime.enums.TypeNewsViewHolder;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
 
 /**
  * Created by asusX541u on 23/05/2018.
  */
 
 public class News implements Serializable {
-    private String link_image;
+    private String img;
     private String title;
     private String content;
     private String writer;
-    private String date_create;
+    private String date;
     private String time_create;
+    private TypeNewsViewHolder typeNewsViewHolder;
 
     public News(String link_image, String title, String content, String writer, String date_create, String time_create) {
-        this.link_image = link_image;
+        this.img = link_image;
         this.title = title;
         this.content = content;
         this.writer = writer;
-        this.date_create = date_create;
+        this.date = date_create;
         this.time_create = time_create;
     }
 
     public News() {
     }
 
-    public void setDate_create(String date_create) {
-        this.date_create = date_create;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getTime_create() {
@@ -50,12 +50,12 @@ public class News implements Serializable {
     }
 
 
-    public String getLink_image() {
-        return link_image;
+    public String getImg() {
+        return img;
     }
 
-    public void setLink_image(String link_image) {
-        this.link_image = link_image;
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getTitle() {
@@ -74,7 +74,15 @@ public class News implements Serializable {
         this.content = content;
     }
 
-    public String getDate_create() {
-        return date_create;
+    public String getDate() {
+        return date;
+    }
+
+    public TypeNewsViewHolder getTypeNewsViewHolder() {
+        return typeNewsViewHolder;
+    }
+
+    public void setTypeNewsViewHolder(TypeNewsViewHolder typeNewsViewHolder) {
+        this.typeNewsViewHolder = typeNewsViewHolder;
     }
 }

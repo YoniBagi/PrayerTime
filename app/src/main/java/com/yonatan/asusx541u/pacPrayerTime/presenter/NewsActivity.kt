@@ -30,17 +30,17 @@ class NewsActivity : AppCompatActivity() {
         setImage()
         tvTitleNews?.text = mNews.title
         tvContent?.text = mNews.content
-        tv_date_article_news?.text = mNews.date_create
+        tv_date_article_news?.text = mNews.date
     }
 
     private fun setImage() {
         ivNews?.let {
             Picasso.with(this)
-                    .load(mNews.link_image)
+                    .load(mNews.img)
                     .into(it)
         }
 
-        ivNews?.setOnClickListener { drillToImagePopup(mNews.link_image) }
+        ivNews?.setOnClickListener { drillToImagePopup(mNews.img) }
     }
 
     private fun drillToImagePopup(linkImage: String?) {

@@ -15,6 +15,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -38,6 +41,7 @@ import com.yonatan.asusx541u.pacPrayerTime.adapters.NewsAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.OnClickMessageCallBack;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
+import com.yonatan.asusx541u.pacPrayerTime.enums.TypeNewsViewHolder;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
 import com.yonatan.asusx541u.pacPrayerTime.managers.NetworkManager;
 import com.yonatan.asusx541u.pacPrayerTime.model.News;
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         checkAvailableNetwork();
         allPrayers();
         initAnimation();
-        initMessagesVP();
+        //initMessagesVP();
         initRecyclerNews();
         setAppBarLayout();
     }
@@ -108,8 +112,11 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     private void initRecyclerNews() {
         ArrayList<News> newsArrayList = new ArrayList<>();
         NewsAdapter newsAdapter =  new NewsAdapter(newsArrayList, this, this);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
+        //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        binding.rvNews.setLayoutManager(layoutManager);
         binding.rvNews.setAdapter(newsAdapter);
-        FirebaseDatabase.getInstance().getReference().child("newsSorek").
+        FirebaseDatabase.getInstance().getReference().child("newsAndAds").
         addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -117,6 +124,11 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
                     newsArrayList.clear();
                     for (DataSnapshot itemDataSnapshot: dataSnapshot.getChildren()){
                         News news = itemDataSnapshot.getValue(News.class);
+                        if (news.getContent() != null && !news.getContent().isEmpty()){
+                            news.setTypeNewsViewHolder(TypeNewsViewHolder.DETAILS_NEWS);
+                        }else {
+                            news.setTypeNewsViewHolder(TypeNewsViewHolder.IMAGE_NEWS);
+                        }
                         newsArrayList.add(news);
                     }
                     newsAdapter.notifyDataSetChanged();
@@ -134,12 +146,14 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         });
     }
 
+/*
     private void initMessagesVP() {
        messagesViewPagerAdapter = new MessagesViewPagerAdapter(NetworkManager.INSTANCE.getAllAds(), this);
         binding.messageVP.setAdapter(messagesViewPagerAdapter);
         binding.messageVP.setPageMargin(16);
         //binding.appBarMainActivity.setOutlineProvider(null);
     }
+*/
 
     private void initAnimation() {
         animationView_prayer = findViewById(R.id.lottie_prayer);
@@ -304,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         super.onResume();
         setAdsListener();
         nextPrayer("sahrit");
-        messagesViewPagerAdapter.updateVP(NetworkManager.INSTANCE.getAllAds());
+        //messagesViewPagerAdapter.updateVP(NetworkManager.INSTANCE.getAllAds());
     }
 
 
@@ -667,8 +681,24 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
 
     @Override
     public void onClickNewsListener(News news) {
+        switch (news.getTypeNewsViewHolder()){
+            case IMAGE_NEWS:
+                goToImageScreen(news.getImg());
+                return;
+            case DETAILS_NEWS:
+                goToNewsScreen(news);
+        }
+    }
+
+    private void goToNewsScreen(News news) {
         Intent intent = new Intent(MainActivity.this, NewsActivity.class);
         intent.putExtra(Consts.News, news);
+        startActivity(intent);
+    }
+
+    private void goToImageScreen(String img) {
+        Intent intent = new Intent(MainActivity.this, ImagePopUp.class);
+        intent.putExtra(Consts.LINK_IMAGE, img);
         startActivity(intent);
     }
 
@@ -681,7 +711,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
 
     @Override
     public void adsCallback() {
-        messagesViewPagerAdapter.updateVP(NetworkManager.INSTANCE.getAllAds());
+        //messagesViewPagerAdapter.updateVP(NetworkManager.INSTANCE.getAllAds());
     }
 
     @Override
