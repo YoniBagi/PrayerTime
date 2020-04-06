@@ -3,8 +3,10 @@ package com.yonatan.asusx541u.pacPrayerTime.presenter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.text.method.LinkMovementMethod
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import com.squareup.picasso.Picasso
 import com.yonatan.asusx541u.pacPrayerTime.R
 import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts
@@ -29,7 +31,8 @@ class NewsActivity : AppCompatActivity() {
     private fun setViews() {
         setImage()
         tvTitleNews?.text = mNews.title
-        tvContent?.text = mNews.content
+        tvContent?.text = HtmlCompat.fromHtml(mNews.content, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        tvContent?.movementMethod = LinkMovementMethod.getInstance()
         tv_date_article_news?.text = mNews.date
     }
 
@@ -37,6 +40,8 @@ class NewsActivity : AppCompatActivity() {
         ivNews?.let {
             Picasso.with(this)
                     .load(mNews.img)
+                    .fit()
+                    .centerCrop()
                     .into(it)
         }
 

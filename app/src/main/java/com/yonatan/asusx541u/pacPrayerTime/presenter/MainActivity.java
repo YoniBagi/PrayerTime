@@ -3,21 +3,9 @@ package com.yonatan.asusx541u.pacPrayerTime.presenter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,14 +26,11 @@ import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
-import com.yonatan.asusx541u.pacPrayerTime.adapters.MessagesViewPagerAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.NewsAdapter;
-import com.yonatan.asusx541u.pacPrayerTime.adapters.OnClickMessageCallBack;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypeNewsViewHolder;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
-import com.yonatan.asusx541u.pacPrayerTime.managers.NetworkManager;
 import com.yonatan.asusx541u.pacPrayerTime.model.News;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
 
@@ -52,11 +39,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements PrayersViewPagerAdapter.ClickPrayerCallBack, NewsAdapter.OnClickNewsCallBack, OnClickMessageCallBack, NetworkManager.DataListener {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+public class MainActivity extends AppCompatActivity implements PrayersViewPagerAdapter.ClickPrayerCallBack, NewsAdapter.OnClickNewsCallBack{
 
     private DatabaseReference mDataBase;
     private TextView textViewNextPrayer, tvTimePrayer;
@@ -74,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     LottieAnimationView animationView_prayer, animationView_clock, animationView_location;
     Menu menu;
     private ActivityMainBinding binding;
-    private MessagesViewPagerAdapter messagesViewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,19 +78,18 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
 
         navigation();
         toolbar();
-        nextPrayer("sahrit");
+        //nextPrayer("sahrit");
         checkAvailableNetwork();
         allPrayers();
         initAnimation();
-        //initMessagesVP();
         initRecyclerNews();
         setAppBarLayout();
     }
 
-    private void setAdsListener() {
+    /*private void setAdsListener() {
         NetworkManager.INSTANCE.setAdsListener(this);
     }
-
+*/
     private void setAppBarLayout() {
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) binding.appBarMainActivity.getLayoutParams();
         params.setBehavior(new AppBarLayout.Behavior());
@@ -145,15 +139,6 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
             }
         });
     }
-
-/*
-    private void initMessagesVP() {
-       messagesViewPagerAdapter = new MessagesViewPagerAdapter(NetworkManager.INSTANCE.getAllAds(), this);
-        binding.messageVP.setAdapter(messagesViewPagerAdapter);
-        binding.messageVP.setPageMargin(16);
-        //binding.appBarMainActivity.setOutlineProvider(null);
-    }
-*/
 
     private void initAnimation() {
         animationView_prayer = findViewById(R.id.lottie_prayer);
@@ -298,7 +283,6 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         menu.findItem(R.id.lessons_4).setVisible(bool);
         menu.findItem(R.id.lessons_5).setVisible(bool);
         menu.findItem(R.id.lessons_6).setVisible(bool);
-        //menu.findItem(R.id.lessons_7).setVisible(bool);
     }
 
     private void collapsePrayers(boolean b) {
@@ -316,17 +300,14 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     @Override
     protected void onResume(){
         super.onResume();
-        setAdsListener();
-        nextPrayer("sahrit");
-        //messagesViewPagerAdapter.updateVP(NetworkManager.INSTANCE.getAllAds());
+        //setAdsListener();
+        //nextPrayer("sahrit");
+        setCurrentPrayer();
     }
 
-
-
-  /*  public void onWindowFocusChanged(boolean hasFocus){
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus) nextPrayer("sahrit");
-    }*/
+    private void setCurrentPrayer() {
+        binding.prayersVP.setCurrentItem(getCurrentPrayer());
+    }
 
     public void nextPrayer(final String prayer){
         mDataBase = FirebaseDatabase.getInstance().getReference().child(prayer);
@@ -384,7 +365,6 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
                             }
                             synagogueArrayAdapter.notifyDataSetChanged();
                             tvTimePrayer.setText(singlePrayer.getTime());
-                            //textViewNextPrayer.setText(namePrayerToHeb(dataSnapshot.getKey()));
                             return;
                         }
                     } else if (hour > currentTime.get(Calendar.HOUR_OF_DAY)) {
@@ -703,20 +683,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     }
 
     @Override
-    public void onClickMessageListener(@NonNull String linkImage) {
-        Intent intent = new Intent(MainActivity.this, ImagePopUp.class);
-        intent.putExtra(Consts.LINK_IMAGE, linkImage);
-        startActivity(intent);
-    }
-
-    @Override
-    public void adsCallback() {
-        //messagesViewPagerAdapter.updateVP(NetworkManager.INSTANCE.getAllAds());
-    }
-
-    @Override
     protected void onStop() {
-        NetworkManager.INSTANCE.setAdsListener(null);
         super.onStop();
     }
 }

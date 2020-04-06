@@ -1,12 +1,6 @@
 package com.yonatan.asusx541u.pacPrayerTime.adapters;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +15,12 @@ import com.yonatan.asusx541u.pacPrayerTime.enums.TypeNewsViewHolder;
 import com.yonatan.asusx541u.pacPrayerTime.model.News;
 
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.text.HtmlCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 /**
  * Created by asusX541u on 23/05/2018.
@@ -72,7 +72,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 detailsViewHolder.iv_news.setVisibility(View.VISIBLE);
             }
             detailsViewHolder.tv_title_news.setText(sinNews.getTitle());
-            detailsViewHolder.tv_content_news.setText(sinNews.getContent());
+            detailsViewHolder.tv_content_news.setText(HtmlCompat.fromHtml(sinNews.getContent(), HtmlCompat.FROM_HTML_MODE_LEGACY));
             //setAnimation(holder.itemView, position);
             //DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy");
             detailsViewHolder.tv_date_article_news.setText(sinNews.getDate());

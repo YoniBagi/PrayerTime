@@ -7,16 +7,16 @@ import com.google.firebase.database.ValueEventListener
 
 object NetworkManager {
     private var adsList =  ArrayList<String>()
-    var mDataListener: DataListener? = null
+    //var mDataListener: DataListener? = null
     private val mDataReference = FirebaseDatabase.getInstance().reference
 
     fun fetchData(){
         fetchAds()
     }
 
-    fun setAdsListener(dataListener: DataListener?){
+    /*fun setAdsListener(dataListener: DataListener?){
         mDataListener = dataListener
-    }
+    }*/
 
     private fun fetchAds() {
         mDataReference.child("adsSorek").addValueEventListener(object : ValueEventListener{
@@ -31,7 +31,7 @@ object NetworkManager {
                         val item = dataSnap.getValue(String::class.java)
                         adsList.add(item)
                     }
-                    mDataListener?.adsCallback()
+                    //mDataListener?.adsCallback()
                 }
             }
 
@@ -41,8 +41,8 @@ object NetworkManager {
     fun getAllAds(): ArrayList<String> {
         return adsList
     }
-
+/*
     interface DataListener{
         fun adsCallback()
-    }
+    }*/
 }
