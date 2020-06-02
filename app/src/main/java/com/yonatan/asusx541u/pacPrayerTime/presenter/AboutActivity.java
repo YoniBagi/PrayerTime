@@ -3,8 +3,6 @@ package com.yonatan.asusx541u.pacPrayerTime.presenter;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
@@ -15,6 +13,10 @@ import android.widget.Toast;
 
 import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
+import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -77,6 +79,12 @@ public class AboutActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsManager.INSTANCE.logScreenOpen(this.getLocalClassName());
     }
 
     public void toolbar(){

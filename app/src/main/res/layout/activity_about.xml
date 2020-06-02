@@ -82,7 +82,7 @@
                 android:paddingTop="5dp"
                 android:scrollbars="vertical"
                 android:text="
-אפליקציה זו פותחה במטרה להקל על תושבי המועצה נחל-שורק במציאת זמני התפילות ומידע על עסקים מקומיים.\n
+אפליקציה זו פותחה במטרה להנגיש לתושבי המועצה נחל-שורק מידע על עדכוני חדשות במועצה, במציאת זמני התפילות ומידע על עסקים מקומיים.\n
 אשמח לקבל תגובות והערות."
                 android:textColor="@color/colorPrimary"
                 android:textDirection="rtl"

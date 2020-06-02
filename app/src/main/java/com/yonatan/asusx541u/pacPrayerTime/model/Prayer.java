@@ -1,18 +1,20 @@
 package com.yonatan.asusx541u.pacPrayerTime.model;
 
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by asusX541u on 18/12/2017.
  */
 //class that hold basic node from DB, the class implement Comparable for sort
-public class Prayer implements Comparable<Prayer>{
+public class Prayer implements Comparable<Prayer>, Serializable {
     private String place;
     private String time;
     private String kind;
@@ -59,7 +61,6 @@ public class Prayer implements Comparable<Prayer>{
     }
 
     public int getHours(){
-        int x = Integer.parseInt((time.substring(0, time.indexOf(":"))));
         return Integer.parseInt((time.substring(0, time.indexOf(":"))));
     }
 

@@ -2,10 +2,6 @@ package com.yonatan.asusx541u.pacPrayerTime.presenter;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +18,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
+import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
 import com.yonatan.asusx541u.pacPrayerTime.model.Lessons;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LessonsActivity extends AppCompatActivity {
 
@@ -125,6 +127,13 @@ public class LessonsActivity extends AppCompatActivity {
             }
         });
         animator.start();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsManager.INSTANCE.logScreenOpen(this.getLocalClassName());
     }
 
     public void toolbar(){

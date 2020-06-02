@@ -1,10 +1,13 @@
 package com.yonatan.asusx541u.pacPrayerTime.presenter;
 
 import android.animation.ValueAnimator;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.appbar.AppBarLayout;
@@ -28,9 +32,11 @@ import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.NewsAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
+import com.yonatan.asusx541u.pacPrayerTime.broadcastReceiver.PrayerAlertReceiver;
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypeNewsViewHolder;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
+import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
 import com.yonatan.asusx541u.pacPrayerTime.model.News;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
 
@@ -52,8 +58,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import static com.yonatan.asusx541u.pacPrayerTime.Utils.Consts.EXTRA_PUSH_NOTIFICATION_PRAYER;
+import static com.yonatan.asusx541u.pacPrayerTime.Utils.Consts.PRAYER_REMINDER_REQUEST_CODE;
+
 public class MainActivity extends AppCompatActivity implements PrayersViewPagerAdapter.ClickPrayerCallBack, NewsAdapter.OnClickNewsCallBack{
 
+    private static final int INTREVAL_TIME = 1000 * 60 * 5;
     private DatabaseReference mDataBase;
     private TextView textViewNextPrayer, tvTimePrayer;
     private ListView lvSynagogue;
@@ -75,7 +85,8 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
+        binding.setMainActivity(this);
+        binding.setLifecycleOwner(this);
         navigation();
         toolbar();
         //nextPrayer("sahrit");
@@ -303,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         //setAdsListener();
         //nextPrayer("sahrit");
         setCurrentPrayer();
+        AnalyticsManager.INSTANCE.logScreenOpen(this.getLocalClassName());
     }
 
     private void setCurrentPrayer() {
@@ -683,7 +695,34 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    public void onClickAlert(@NotNull Prayer prayer) {
+        Calendar calendar = getTimeToNotify(prayer);
+        Toast.makeText(this, "ההתראה הופעלה", Toast.LENGTH_LONG).show();
+        Intent notifyIntent = new Intent(this, PrayerAlertReceiver.class);
+        notifyIntent.putExtra(EXTRA_PUSH_NOTIFICATION_PRAYER, prayer.getTypePrayer().getHebPrayer());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+                PRAYER_REMINDER_REQUEST_CODE,
+                notifyIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - INTREVAL_TIME, pendingIntent);
+            }
+            else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - INTREVAL_TIME, pendingIntent);
+            }
+        }
+    }
+
+    private Calendar getTimeToNotify(Prayer prayer) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, prayer.getHours());
+        calendar.set(Calendar.MINUTE, prayer.getMinutes());
+        if (calendar.getTimeInMillis() < System.currentTimeMillis() && calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY){
+            calendar.add(Calendar.DATE, 1);
+        }
+        return calendar;
     }
 }

@@ -1,17 +1,14 @@
 package com.yonatan.asusx541u.pacPrayerTime.adapters
 
-import androidx.databinding.DataBindingUtil
-import androidx.viewpager.widget.PagerAdapter
-import androidx.cardview.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.viewpager.widget.PagerAdapter
 import com.yonatan.asusx541u.pacPrayerTime.R
 import com.yonatan.asusx541u.pacPrayerTime.databinding.ViewPagerPrayersItemBinding
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer
-import java.util.*
-import kotlin.collections.ArrayList
 
 class PrayersViewPagerAdapter(
         private val allPrayers: ArrayList<Prayer>,
@@ -66,8 +63,13 @@ class PrayersViewPagerAdapter(
         clickPrayerCallBack.onClickPrayer(allPrayers[position].typePrayer)
     }
 
+    fun onClickAlert(position: Int){
+        clickPrayerCallBack.onClickAlert(allPrayers[position])
+    }
+
     interface ClickPrayerCallBack{
         fun onClickPrayer(typePrayer: TypePrayer)
+        fun onClickAlert(prayer: Prayer)
     }
 
 }

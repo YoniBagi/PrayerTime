@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
+import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -87,6 +88,12 @@ public class SplashScreen extends AppCompatActivity {
         imagePopUpIntent.putExtra(Consts.LINK_IMAGE, link_advertising);
         startActivity(imagePopUpIntent);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsManager.INSTANCE.logScreenOpen(this.getLocalClassName());
     }
 }
 

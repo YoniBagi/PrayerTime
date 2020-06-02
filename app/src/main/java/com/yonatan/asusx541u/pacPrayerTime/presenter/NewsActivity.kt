@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso
 import com.yonatan.asusx541u.pacPrayerTime.R
 import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils.centerTitle
+import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager
 import com.yonatan.asusx541u.pacPrayerTime.model.News
 import kotlinx.android.synthetic.main.activity_news.*
 
@@ -63,6 +64,11 @@ class NewsActivity : AppCompatActivity() {
         actionBar.title = "חדשות שורק נט"
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        AnalyticsManager.logScreenOpen(this.localClassName)
+    }
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         finish()
         return true

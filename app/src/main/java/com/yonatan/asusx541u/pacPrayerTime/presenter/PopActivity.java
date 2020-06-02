@@ -1,11 +1,11 @@
 package com.yonatan.asusx541u.pacPrayerTime.presenter;
 
 import android.app.Activity;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 
 import com.yonatan.asusx541u.pacPrayerTime.R;
+import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
 
 public class PopActivity extends Activity {
 
@@ -21,5 +21,12 @@ public class PopActivity extends Activity {
         int height = displayMetrics.heightPixels;
 
         getWindow().setLayout((int) (width* .8),(int) (height * .7));
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsManager.INSTANCE.logScreenOpen(this.getLocalClassName());
     }
 }

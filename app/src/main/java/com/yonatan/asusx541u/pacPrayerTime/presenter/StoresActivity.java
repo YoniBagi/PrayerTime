@@ -1,8 +1,6 @@
 package com.yonatan.asusx541u.pacPrayerTime.presenter;
 
 import android.content.Intent;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.animation.Animation;
@@ -18,10 +16,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.StoreAdapter;
+import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
 import com.yonatan.asusx541u.pacPrayerTime.model.Store;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class StoresActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
@@ -84,6 +86,13 @@ public class StoresActivity extends AppCompatActivity {
                 previousGroup = groupPosition;
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsManager.INSTANCE.logScreenOpen(this.getLocalClassName());
     }
 
     private void toolbar() {
