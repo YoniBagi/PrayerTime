@@ -6,10 +6,10 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.yonatan.asusx541u.pacPrayerTime"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
-        versionCode 13
-        versionName "3.4"
+        versionCode 14
+        versionName "3.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.3.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.commit451:PhotoView:1.2.5'
+    implementation 'com.mixpanel.android:mixpanel-android:5.8.3'
 }
 
 
