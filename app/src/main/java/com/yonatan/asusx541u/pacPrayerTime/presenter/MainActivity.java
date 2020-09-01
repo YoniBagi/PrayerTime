@@ -37,6 +37,7 @@ import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypeNewsViewHolder;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
 import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
+import com.yonatan.asusx541u.pacPrayerTime.managers.NetworkManager;
 import com.yonatan.asusx541u.pacPrayerTime.model.News;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
 
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     LottieAnimationView animationView_prayer, animationView_clock, animationView_location;
     Menu menu;
     private ActivityMainBinding binding;
+    private NewsAdapter newsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         toolbar();
         //nextPrayer("sahrit");
         checkAvailableNetwork();
-        allPrayers();
+        //allPrayers();
+        initPrayersVP();
         initAnimation();
         initRecyclerNews();
         setAppBarLayout();
@@ -116,12 +119,14 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
 
     private void initRecyclerNews() {
         ArrayList<News> newsArrayList = new ArrayList<>();
-        NewsAdapter newsAdapter =  new NewsAdapter(newsArrayList, this, this);
+        newsArrayList = NetworkManager.INSTANCE.getNewsList();
+        newsAdapter =  new NewsAdapter(newsArrayList, this, this);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
         //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         binding.rvNews.setLayoutManager(layoutManager);
         binding.rvNews.setAdapter(newsAdapter);
-        FirebaseDatabase.getInstance().getReference().child("newsAndAds").
+        updateRecyclerNews();
+        /*FirebaseDatabase.getInstance().getReference().child("newsAndAds").
         addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -148,7 +153,11 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
+    }
+
+    private void updateRecyclerNews() {
+        newsAdapter.notifyDataSetChanged();
     }
 
     private void initAnimation() {
@@ -622,6 +631,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     }*/
 
     private void initPrayersVP(){
+        allPrayers = NetworkManager.INSTANCE.getAllPrayers();
         calculateSameTimeOfPrayers();
         binding.prayersVP.setAdapter(new PrayersViewPagerAdapter(allPrayers, this));
         binding.prayersVP.setPageMargin(16);

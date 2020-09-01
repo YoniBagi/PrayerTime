@@ -16,10 +16,11 @@ import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
+import com.yonatan.asusx541u.pacPrayerTime.managers.NetworkManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity implements NetworkManager.DataListener {
     private final int SPLASH_DISPLAY_LENGTH = 4500;
     private DatabaseReference databaseReference;
     private boolean flag;
@@ -30,10 +31,16 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         UiUtils.INSTANCE.centerTitle(this);
-        //NetworkManager.INSTANCE.fetchData();
+        initListener();
+        NetworkManager.INSTANCE.fetchData();
         setImageAds();
-        initLottieAnim();
-        handleSplashDisplay();
+        //initLottieAnim();
+        //handleSplashDisplay();
+
+    }
+
+    private void initListener() {
+        NetworkManager.INSTANCE.setDataListener(this);
     }
 
     private void handleSplashDisplay() {
@@ -94,6 +101,16 @@ public class SplashScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         AnalyticsManager.INSTANCE.logScreenOpen(this.getLocalClassName());
+    }
+
+    @Override
+    public void adsCallback() { }
+
+    @Override
+    public void firstDataFetched() {
+        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 
