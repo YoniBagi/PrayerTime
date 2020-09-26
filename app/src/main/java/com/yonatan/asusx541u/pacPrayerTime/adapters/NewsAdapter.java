@@ -39,7 +39,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        //return position % 3;
         return newsArrayList.get(position).getTypeNewsViewHolder().getInt();
     }
 

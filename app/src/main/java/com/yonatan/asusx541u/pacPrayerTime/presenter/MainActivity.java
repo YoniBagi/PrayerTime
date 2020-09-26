@@ -29,6 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.IPrefs;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.Prefs;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.NewsAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
@@ -39,6 +41,7 @@ import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
 import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
 import com.yonatan.asusx541u.pacPrayerTime.model.News;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
+import com.yonatan.asusx541u.pacPrayerTime.popUps.NotificationDialog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     LottieAnimationView animationView_prayer, animationView_clock, animationView_location;
     Menu menu;
     private ActivityMainBinding binding;
+    private IPrefs iPrefs = new Prefs();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,13 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         initAnimation();
         initRecyclerNews();
         setAppBarLayout();
+        showPopupNotification();
+    }
+
+    private void showPopupNotification() {
+        if (!iPrefs.getDontShoeNotificationDialog()){
+            NotificationDialog.Companion.newInstance().show(getSupportFragmentManager(), "");
+        }
     }
 
     /*private void setAdsListener() {

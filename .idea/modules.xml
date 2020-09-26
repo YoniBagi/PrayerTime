@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/PersonalProject-PrayerTime.iml" filepath="$PROJECT_DIR$/PersonalProject-PrayerTime.iml" group="PrayerTime" />
+      <module fileurl="file://$PROJECT_DIR$/app/PersonalProject-PrayerTime-app.iml" filepath="$PROJECT_DIR$/app/PersonalProject-PrayerTime-app.iml" group="PrayerTime/app" />
       <module fileurl="file://$PROJECT_DIR$/PrayerTime.iml" filepath="$PROJECT_DIR$/PrayerTime.iml" group="PrayerTime" />
       <module fileurl="file://$PROJECT_DIR$/app/PrayerTime-app.iml" filepath="$PROJECT_DIR$/app/PrayerTime-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="PrayerTime/app" />

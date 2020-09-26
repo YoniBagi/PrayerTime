@@ -37,6 +37,11 @@
         <receiver android:name=".broadcastReceiver.PrayerAlertReceiver"
             android:enabled="true"
             android:exported="false"/>
+        <service android:name=".services.SorekFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

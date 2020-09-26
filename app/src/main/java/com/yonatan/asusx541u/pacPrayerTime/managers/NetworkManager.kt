@@ -20,16 +20,16 @@ object NetworkManager {
 
     private fun fetchAds() {
         mDataReference.child("adsSorek").addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError?) {
+            override fun onCancelled(p0: DatabaseError) {
 
             }
 
-            override fun onDataChange(dataSnapshot: DataSnapshot?) {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
                 adsList.clear()
                 dataSnapshot?.let {
                     for (dataSnap in it.children){
                         val item = dataSnap.getValue(String::class.java)
-                        adsList.add(item)
+                        item?.let { it1 -> adsList.add(it1) }
                     }
                     //mDataListener?.adsCallback()
                 }
