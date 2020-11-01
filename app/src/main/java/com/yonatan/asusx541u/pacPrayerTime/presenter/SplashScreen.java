@@ -68,7 +68,7 @@ public class SplashScreen extends AppCompatActivity implements NetworkManager.Da
     private void setImageAds() {
         //The Firebase Realtime Database client automatically downloads the data at these locations and keeps it in sync even if the reference has no active listeners.
         //And now he get the data faster, it's mean that while the animation works I pull the information.
-        FirebaseDatabase.getInstance().getReference().keepSynced(true);
+//        FirebaseDatabase.getInstance().getReference().keepSynced(true);
         final ImageView ivIcon = findViewById(R.id.imageViewIcon);
         ivIcon.setOnClickListener(v ->{onClickAdsImage();});
 

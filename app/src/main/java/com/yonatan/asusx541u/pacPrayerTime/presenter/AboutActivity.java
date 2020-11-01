@@ -11,8 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.IPrefs;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.Prefs;
 import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
 
 import androidx.appcompat.app.ActionBar;
@@ -26,6 +29,8 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
         toolbar();
 
+        IPrefs iPrefs = new Prefs();
+
         ImageView iVLinkdin = (ImageView) findViewById(R.id.iVlinkedin);
         ImageView iVBrowser = (ImageView) findViewById(R.id.iVbrowser);
         ImageView iVFacbook = (ImageView) findViewById(R.id.iVfacebook);
@@ -38,6 +43,10 @@ public class AboutActivity extends AppCompatActivity {
         Typeface typeface1 = Typeface.createFromAsset(getAssets(),"fonts/Assistant-Regular.ttf");
         tvAboutApp.setTypeface(typeface1);
         tvAboutApp.setMovementMethod(new ScrollingMovementMethod());
+        SwitchMaterial switchMaterial = findViewById(R.id.switchNotification);
+
+        switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> iPrefs.setAgreementNotification(isChecked));
+        switchMaterial.setChecked(iPrefs.getAgreementNotification());
 
         iVLinkdin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +99,7 @@ public class AboutActivity extends AppCompatActivity {
     public void toolbar(){
         UiUtils.INSTANCE.centerTitle(this);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("אודות");
+        actionBar.setTitle("הגדרות");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
     }

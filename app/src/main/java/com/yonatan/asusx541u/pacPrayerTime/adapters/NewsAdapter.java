@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.yonatan.asusx541u.pacPrayerTime.BuildConfig;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypeNewsViewHolder;
@@ -39,7 +40,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        //return position % 3;
         return newsArrayList.get(position).getTypeNewsViewHolder().getInt();
     }
 
@@ -87,23 +87,30 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             imageViewHolder.ivMessages.setOnClickListener(view ->
                     mOnClickNewsCallBack.onClickNewsListener(newsArrayList.get(position)));
         }
-    }
-  /*  private void setAnimation(View itemView, int position) {
-        int lastPosition = -1;
-        if (position > lastPosition)
-        {
-            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
-            itemView.startAnimation(animation);
-            lastPosition = position;
+        if (BuildConfig.DEBUG){
+            BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
+            baseViewHolder.deletePost.setVisibility(View.VISIBLE);
+            baseViewHolder.deletePost.setOnClickListener((view) -> {
+                mOnClickNewsCallBack.onClickDeletePost(newsArrayList.get(position).getId());
+            });
         }
-    }*/
+    }
 
     @Override
     public int getItemCount() {
         return newsArrayList.size();
     }
 
-    public class DetailsViewHolder extends RecyclerView.ViewHolder {
+    public static class BaseViewHolder extends RecyclerView.ViewHolder{
+        ImageView deletePost;
+
+        public BaseViewHolder(@NonNull View itemView) {
+            super(itemView);
+            deletePost = itemView.findViewById(R.id.deletePost);
+        }
+    }
+
+    public static class DetailsViewHolder extends BaseViewHolder {
         ImageView iv_news;
         TextView tv_title_news, tv_content_news, tv_date_article_news;
         ConstraintLayout rootNews;
@@ -120,7 +127,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class ImageViewHolder extends RecyclerView.ViewHolder {
+    public static class ImageViewHolder extends BaseViewHolder {
         ImageView ivMessages;
 
         public ImageViewHolder(@NonNull View itemView) {
@@ -131,5 +138,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnClickNewsCallBack {
         void onClickNewsListener(News news);
+        void onClickDeletePost(String idPost);
     }
 }

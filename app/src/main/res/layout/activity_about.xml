@@ -7,126 +7,132 @@
     android:background="@color/background"
     tools:context="com.yonatan.asusx541u.pacPrayerTime.presenter.AboutActivity">
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clAboutApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/layout_bg"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="אפליקציה שורק נט"
+            android:textColor="@color/colorPrimary"
+            android:textDirection="rtl"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAboutApp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            android:scrollbars="vertical"
+            android:text="@string/abouutApp"
+            android:textColor="@color/colorPrimary"
+            android:textDirection="rtl"
+            android:textSize="18sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="הפעל קבלת הודעות משורק נט"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAboutApp"
+            app:switchMinWidth="50dp"
+            app:useMaterialThemeColors="false"
+            android:checked="false"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clPurposeApp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="3dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="3dp"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/layout_bg"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/clAboutApp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvAboutMe"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_weight="2"
-            android:background="@drawable/layout_bg"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:gravity="center"
-                android:text="אפליקציה שורק נט"
-                android:textColor="@color/colorPrimary"
-                android:textDirection="rtl"
-                android:textStyle="bold"
-                android:textSize="18sp"/>
-
-            <TextView
-                android:id="@+id/tvAboutApp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="5dp"
-                android:scrollbars="vertical"
-                android:text="@string/abouutApp"
-                android:textColor="@color/colorPrimary"
-                android:textDirection="rtl"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="3"
-            android:background="@drawable/layout_bg"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvAboutMe"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:includeFontPadding="false"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="5dp"
-                android:scrollbars="vertical"
-                android:text="
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            android:scrollbars="vertical"
+            android:text="
 אפליקציה זו פותחה במטרה להנגיש לתושבי המועצה נחל-שורק מידע על עדכוני חדשות במועצה, במציאת זמני התפילות ומידע על עסקים מקומיים.\n
 אשמח לקבל תגובות והערות."
-                android:textColor="@color/colorPrimary"
-                android:textDirection="rtl"
-                android:textSize="18sp" />
+            android:textColor="@color/colorPrimary"
+            android:textDirection="rtl"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="3"
-                android:orientation="horizontal">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-                <ImageView
-                    android:id="@+id/iVmail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/iconmail" />
+            <ImageView
+                android:id="@+id/iVmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/iVlinkedin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/iconmail" />
 
-                <ImageView
-                    android:id="@+id/iVlinkedin"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    app:srcCompat="@drawable/iconlinkedin" />
+            <ImageView
+                android:id="@+id/iVlinkedin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                app:layout_constraintEnd_toStartOf="@+id/iVbrowser"
+                app:layout_constraintStart_toEndOf="@+id/iVmail"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/iconlinkedin"
+                android:focusable="true" />
 
-                <ImageView
-                    android:id="@+id/iVbrowser"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/iconbrowser" />
+            <ImageView
+                android:id="@+id/iVbrowser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/iVfacebook"
+                app:layout_constraintStart_toEndOf="@+id/iVlinkedin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/iconbrowser" />
 
-                <ImageView
-                    android:id="@+id/iVfacebook"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/iconfacebook" />
+            <ImageView
+                android:id="@+id/iVfacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iVbrowser"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/iconfacebook" />
 
-            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

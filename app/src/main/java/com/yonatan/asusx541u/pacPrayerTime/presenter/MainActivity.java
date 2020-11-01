@@ -29,6 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.yonatan.asusx541u.pacPrayerTime.R;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts;
 import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.IPrefs;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.Prefs;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.NewsAdapter;
 import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
@@ -40,6 +42,7 @@ import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
 import com.yonatan.asusx541u.pacPrayerTime.managers.NetworkManager;
 import com.yonatan.asusx541u.pacPrayerTime.model.News;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
+import com.yonatan.asusx541u.pacPrayerTime.popUps.NotificationDialog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     Menu menu;
     private ActivityMainBinding binding;
     private NewsAdapter newsAdapter;
+    private IPrefs iPrefs = new Prefs();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +102,13 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         initAnimation();
         initRecyclerNews();
         setAppBarLayout();
+        showPopupNotification();
+    }
+
+    private void showPopupNotification() {
+        if (!iPrefs.getDontShoeNotificationDialog()){
+            NotificationDialog.Companion.newInstance().show(getSupportFragmentManager(), "");
+        }
     }
 
     /*private void setAdsListener() {
@@ -134,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
                     newsArrayList.clear();
                     for (DataSnapshot itemDataSnapshot: dataSnapshot.getChildren()){
                         News news = itemDataSnapshot.getValue(News.class);
+                        news.setId(itemDataSnapshot.getKey());
                         if (news.getContent() != null && !news.getContent().isEmpty()){
                             news.setTypeNewsViewHolder(TypeNewsViewHolder.DETAILS_NEWS);
                         }else {
@@ -690,6 +702,12 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
             case DETAILS_NEWS:
                 goToNewsScreen(news);
         }
+    }
+
+    @Override
+    public void onClickDeletePost(String idPost) {
+        Log.d("Main", idPost);
+        NetworkManager.INSTANCE.removePost(idPost);
     }
 
     private void goToNewsScreen(News news) {

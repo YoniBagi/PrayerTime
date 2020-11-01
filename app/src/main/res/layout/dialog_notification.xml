@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_radius_30"
+    android:layout_margin="30dp">
+
+    <TextView
+        android:id="@+id/contentNotificationDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="בגרסה האחרונה נוספה אפשרות של קבלת הודעות משורק נט, באפשרותך לבטל אפשרות זו בתפריט - מסך הגדרות"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="18sp"/>
+
+    <CheckBox
+        android:id="@+id/dontShowAgain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="אל תציג שוב"
+        app:layout_constraintTop_toBottomOf="@+id/contentNotificationDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp" />
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="הבנתי"
+        app:layout_constraintTop_toBottomOf="@+id/dontShowAgain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/proceedToSettingsBtn"
+        android:layout_marginTop="30dp"
+        android:padding="10dp"
+        android:background="@drawable/bg_grey_button_corner_radius"
+        android:textColor="@color/white"
+        android:layout_marginEnd="100dp"
+        android:layout_marginStart="30dp" />
+
+    <Button
+        android:id="@+id/proceedToSettingsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="למסך הגדרות"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/okButton"
+        app:layout_constraintStart_toEndOf="@+id/okButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/bg_button_blue_corner_radius"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="50dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

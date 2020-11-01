@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 
 public class News implements Serializable {
+    private String id;
     private String img;
     private String title;
     private String content;
@@ -84,5 +85,13 @@ public class News implements Serializable {
 
     public void setTypeNewsViewHolder(TypeNewsViewHolder typeNewsViewHolder) {
         this.typeNewsViewHolder = typeNewsViewHolder;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
