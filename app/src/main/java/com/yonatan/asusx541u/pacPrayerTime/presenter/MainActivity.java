@@ -39,6 +39,7 @@ import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypeNewsViewHolder;
 import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
 import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
+import com.yonatan.asusx541u.pacPrayerTime.managers.NetworkManager;
 import com.yonatan.asusx541u.pacPrayerTime.model.News;
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
 import com.yonatan.asusx541u.pacPrayerTime.popUps.NotificationDialog;
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
                     newsArrayList.clear();
                     for (DataSnapshot itemDataSnapshot: dataSnapshot.getChildren()){
                         News news = itemDataSnapshot.getValue(News.class);
+                        news.setId(itemDataSnapshot.getKey());
                         if (news.getContent() != null && !news.getContent().isEmpty()){
                             news.setTypeNewsViewHolder(TypeNewsViewHolder.DETAILS_NEWS);
                         }else {
@@ -691,6 +693,12 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
             case DETAILS_NEWS:
                 goToNewsScreen(news);
         }
+    }
+
+    @Override
+    public void onClickDeletePost(String idPost) {
+        Log.d("Main", idPost);
+        NetworkManager.INSTANCE.removePost(idPost);
     }
 
     private void goToNewsScreen(News news) {

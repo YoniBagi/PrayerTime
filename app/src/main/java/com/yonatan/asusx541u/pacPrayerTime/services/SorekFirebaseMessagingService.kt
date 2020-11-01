@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessaging
@@ -23,6 +22,7 @@ import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
 import com.yonatan.asusx541u.pacPrayerTime.R
 import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.Prefs
+import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager
 import com.yonatan.asusx541u.pacPrayerTime.presenter.MainActivity
 import kotlin.random.Random
 
@@ -45,6 +45,7 @@ class SorekFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         Log.d(TAG, "data: ${remoteMessage.data} , notification: title: ${remoteMessage.data["title"]}, body: ${remoteMessage.data["body"]}")
+        AnalyticsManager.onNotificationReceived()
 
         if (iPrefs.getAgreementNotification()){
             mRemoteMessage = remoteMessage
@@ -108,7 +109,7 @@ class SorekFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        FirebaseMessaging.getInstance().subscribeToTopic("all");
+        FirebaseMessaging.getInstance().subscribeToTopic("all")
         Log.d(TAG,"NewToken $token")
     }
 

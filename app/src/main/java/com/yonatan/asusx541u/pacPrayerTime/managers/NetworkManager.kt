@@ -14,6 +14,10 @@ object NetworkManager {
         fetchAds()
     }
 
+    fun removePost(idPost: String){
+        mDataReference.child("newsAndAds").child(idPost).removeValue()
+    }
+
     /*fun setAdsListener(dataListener: DataListener?){
         mDataListener = dataListener
     }*/
