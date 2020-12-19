@@ -14,43 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.yonatan.asusx541u.pacPrayerTime.R;
-import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts;
-import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
-import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.IPrefs;
-import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.Prefs;
-import com.yonatan.asusx541u.pacPrayerTime.adapters.CustomAdapterSyn;
-import com.yonatan.asusx541u.pacPrayerTime.adapters.NewsAdapter;
-import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
-import com.yonatan.asusx541u.pacPrayerTime.broadcastReceiver.PrayerAlertReceiver;
-import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
-import com.yonatan.asusx541u.pacPrayerTime.enums.TypeNewsViewHolder;
-import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
-import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
-import com.yonatan.asusx541u.pacPrayerTime.managers.NetworkManager;
-import com.yonatan.asusx541u.pacPrayerTime.model.News;
-import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
-import com.yonatan.asusx541u.pacPrayerTime.popUps.NotificationDialog;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -62,23 +27,43 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.navigation.NavigationView;
+import com.yonatan.asusx541u.pacPrayerTime.R;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.Consts;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.UiUtils;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.IPrefs;
+import com.yonatan.asusx541u.pacPrayerTime.Utils.prefs.Prefs;
+import com.yonatan.asusx541u.pacPrayerTime.adapters.NewsAdapter;
+import com.yonatan.asusx541u.pacPrayerTime.adapters.PrayersViewPagerAdapter;
+import com.yonatan.asusx541u.pacPrayerTime.broadcastReceiver.PrayerAlertReceiver;
+import com.yonatan.asusx541u.pacPrayerTime.databinding.ActivityMainBinding;
+import com.yonatan.asusx541u.pacPrayerTime.enums.TypePrayer;
+import com.yonatan.asusx541u.pacPrayerTime.managers.AnalyticsManager;
+import com.yonatan.asusx541u.pacPrayerTime.managers.NetworkManager;
+import com.yonatan.asusx541u.pacPrayerTime.model.News;
+import com.yonatan.asusx541u.pacPrayerTime.model.Prayer;
+import com.yonatan.asusx541u.pacPrayerTime.popUps.NotificationDialog;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import static com.yonatan.asusx541u.pacPrayerTime.Utils.Consts.EXTRA_PUSH_NOTIFICATION_PRAYER;
 import static com.yonatan.asusx541u.pacPrayerTime.Utils.Consts.PRAYER_REMINDER_REQUEST_CODE;
 
-public class MainActivity extends AppCompatActivity implements PrayersViewPagerAdapter.ClickPrayerCallBack, NewsAdapter.OnClickNewsCallBack{
+public class MainActivity extends AppCompatActivity implements PrayersViewPagerAdapter.ClickPrayerCallBack, NewsAdapter.OnClickNewsCallBack, NetworkManager.DataListener {
 
     private static final int INTREVAL_TIME = 1000 * 60 * 5;
-    private DatabaseReference mDataBase;
-    private TextView textViewNextPrayer, tvTimePrayer;
-    private ListView lvSynagogue;
-    private String nextTimeT, tempNextTimePrayer;
+    private TextView textViewNextPrayer;
+    private String nextTimeT;
     private Calendar currentTime = Calendar.getInstance();
     private int hour, minutes, currentPrayer;
-    private boolean flag;
-    ArrayList<Prayer> mListPrayer = new ArrayList<>();
     ArrayList<String> mListSynagogue = new ArrayList<>();
     ArrayList<Prayer> allPrayers = new ArrayList<>();
-    //This final variable to send info to another activity
     final static String KIND_PRAYER = "com.yonatan.asusx541u.pacPrayerTime.kindPrayer";
     private DrawerLayout drawerLayout;
     LottieAnimationView animationView_prayer, animationView_clock, animationView_location;
@@ -95,9 +80,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         binding.setLifecycleOwner(this);
         navigation();
         toolbar();
-        //nextPrayer("sahrit");
         checkAvailableNetwork();
-        //allPrayers();
         initPrayersVP();
         initAnimation();
         initRecyclerNews();
@@ -105,16 +88,18 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         showPopupNotification();
     }
 
+    private void setListeners() {
+        NetworkManager.INSTANCE.setDataListener(this);
+    }
+
+
+
     private void showPopupNotification() {
         if (!iPrefs.getDontShoeNotificationDialog()){
             NotificationDialog.Companion.newInstance().show(getSupportFragmentManager(), "");
         }
     }
 
-    /*private void setAdsListener() {
-        NetworkManager.INSTANCE.setAdsListener(this);
-    }
-*/
     private void setAppBarLayout() {
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) binding.appBarMainActivity.getLayoutParams();
         params.setBehavior(new AppBarLayout.Behavior());
@@ -129,43 +114,13 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     }
 
     private void initRecyclerNews() {
-        ArrayList<News> newsArrayList = new ArrayList<>();
-        newsArrayList = NetworkManager.INSTANCE.getNewsList();
+        ArrayList<News> newsArrayList = NetworkManager.INSTANCE.getNewsList();
         newsAdapter =  new NewsAdapter(newsArrayList, this, this);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
         //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         binding.rvNews.setLayoutManager(layoutManager);
         binding.rvNews.setAdapter(newsAdapter);
         updateRecyclerNews();
-        /*FirebaseDatabase.getInstance().getReference().child("newsAndAds").
-        addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    newsArrayList.clear();
-                    for (DataSnapshot itemDataSnapshot: dataSnapshot.getChildren()){
-                        News news = itemDataSnapshot.getValue(News.class);
-                        news.setId(itemDataSnapshot.getKey());
-                        if (news.getContent() != null && !news.getContent().isEmpty()){
-                            news.setTypeNewsViewHolder(TypeNewsViewHolder.DETAILS_NEWS);
-                        }else {
-                            news.setTypeNewsViewHolder(TypeNewsViewHolder.IMAGE_NEWS);
-                        }
-                        newsArrayList.add(news);
-                    }
-                    newsAdapter.notifyDataSetChanged();
-                }catch (Exception e){
-                    if (e.getMessage() !=null)
-                    Log.d("Request News:", e.getMessage());
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
     }
 
     private void updateRecyclerNews() {
@@ -220,9 +175,6 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 menu = navigationView.getMenu();
                 switch (item.getItemId()){
-                   /* case R.id.nav_news:
-                        drawerLayout.closeDrawers();
-                        startActivity(new Intent(MainActivity.this, NewsActivity.class));*/
                     case R.id.nav_nextPrayer:
                         drawerLayout.closeDrawers();
                         return true;
@@ -332,203 +284,13 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
     @Override
     protected void onResume(){
         super.onResume();
-        //setAdsListener();
-        //nextPrayer("sahrit");
         setCurrentPrayer();
         AnalyticsManager.INSTANCE.logScreenOpen(this.getLocalClassName());
+        setListeners();
     }
 
     private void setCurrentPrayer() {
         binding.prayersVP.setCurrentItem(getCurrentPrayer());
-    }
-
-    public void nextPrayer(final String prayer){
-        mDataBase = FirebaseDatabase.getInstance().getReference().child(prayer);
-        lvSynagogue =  findViewById(R.id.listViewSynagogue);
-        tvTimePrayer =  findViewById(R.id.textViewTimePrayer);
-        textViewNextPrayer = findViewById(R.id.textViewNextPrayer);
-        currentTime = Calendar.getInstance();
-        flag = false;
-        //A special case, if it's Saturday night I'm not interested in Arvit prayers of the weekday
-        // but will present me the earliest prayer on Sunday.
-        if(currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
-            getEarlyPrayer();
-            return;
-        }
-        final CustomAdapterSyn synagogueArrayAdapter = new CustomAdapterSyn(mListSynagogue,getApplicationContext());
-        lvSynagogue.setAdapter(synagogueArrayAdapter);
-        mDataBase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mListPrayer.clear();
-                /*dataSnapshot handle the reference to whole DB of a certain prayer and func getValue give all child to HashMap */
-                Map<String, Object> mapPrayer = (Map<String, Object>) dataSnapshot.getValue();
-                for (Map.Entry<String, Object> entry : mapPrayer.entrySet()) {
-                    Map singlePrayer = (Map) entry.getValue();
-                    Prayer mPrayer = new Prayer((String) singlePrayer.get("place"), (String) singlePrayer.get("time"));
-                    mListPrayer.add(mPrayer);
-                }
-                if (currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY || currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY)
-                    for (Prayer prayer : mListPrayer) {
-                        if (prayer.getPlace().equals("שערי ציון") && prayer.getTime().equals("6:00"))
-                            prayer.setTime("5:50");
-                        else if (prayer.getPlace().equals("מרכזי") && prayer.getTime().equals("6:00"))
-                            prayer.setTime("5:50");
-
-                    }
-                Collections.sort(mListPrayer);
-                currentPrayer = 0;
-                mListSynagogue.clear();
-
-                for (Prayer singlePrayer : mListPrayer) {
-                    nextTimeT = singlePrayer.getTime();
-                    hour = Integer.parseInt(nextTimeT.substring(0, nextTimeT.indexOf(":")));
-                    minutes = Integer.parseInt(nextTimeT.substring(nextTimeT.indexOf(":") + 1));
-                    if (hour == currentTime.get(Calendar.HOUR_OF_DAY)) {
-                        if (minutes >= currentTime.get(Calendar.MINUTE)) {
-                            flag = true;
-                            mListSynagogue.add(singlePrayer.getPlace());
-                            /*Add all places of prayer at the same time */
-                            while (mListPrayer.size() != currentPrayer + 1) {
-                                tempNextTimePrayer = mListPrayer.get(currentPrayer + 1).getTime();
-                                if (tempNextTimePrayer.equals(nextTimeT)) {
-                                    mListSynagogue.add(mListPrayer.get(currentPrayer + 1).getPlace());
-                                }
-                                currentPrayer++;
-                            }
-                            synagogueArrayAdapter.notifyDataSetChanged();
-                            tvTimePrayer.setText(singlePrayer.getTime());
-                            return;
-                        }
-                    } else if (hour > currentTime.get(Calendar.HOUR_OF_DAY)) {
-                        mListSynagogue.add(singlePrayer.getPlace());
-                        while (mListPrayer.size() != currentPrayer + 1) {
-                            tempNextTimePrayer = mListPrayer.get(currentPrayer + 1).getTime();
-                            if (tempNextTimePrayer.equals(nextTimeT)) {
-                                mListSynagogue.add(mListPrayer.get(currentPrayer + 1).getPlace());
-                            }
-                            currentPrayer++;
-                        }
-                        tvTimePrayer.setText(singlePrayer.getTime());
-                        synagogueArrayAdapter.notifyDataSetChanged();
-                        flag = true;
-                        //textViewNextPrayer.setText(namePrayerToHeb(dataSnapshot.getKey()));
-                        return;
-                    }
-                    currentPrayer++;
-                }
-
-                if (dataSnapshot.getKey() == "sahrit" && !flag) {
-                    mListPrayer.clear();
-                    nextPrayer("mincha");
-                } else if (dataSnapshot.getKey() == "mincha" && !flag) {
-                    mListPrayer.clear();
-                    nextPrayer("arvit");
-                }
-                /*This case happens after the last prayer and it is not yet 00:00.*/
-                else if (!flag) getEarlyPrayer();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-    }
-/*  General: This method used for to cases:
-*       1. when the day is Saturday.
-*       2. when the time is after the last prayer in all prayers, so we need to get the first prayer else we will
-*           have to wait for the time will arrive to 00:00 (according to my algorithm)
-        Paramters: NONE
-        Return Value: NONE
-         */
-
-    public void getEarlyPrayer(){
-        mDataBase = FirebaseDatabase.getInstance().getReference().child("sahrit");
-        lvSynagogue = (ListView) findViewById(R.id.listViewSynagogue);
-        tvTimePrayer = (TextView) findViewById(R.id.textViewTimePrayer);
-        textViewNextPrayer = (TextView) findViewById(R.id.textViewNextPrayer);
-        final CustomAdapterSyn synagogueArrayAdapter = new CustomAdapterSyn(mListSynagogue,getApplicationContext());
-        lvSynagogue.setAdapter(synagogueArrayAdapter);
-        mDataBase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mListPrayer.clear();
-                Map<String, Object> mapPrayer = (Map<String, Object>) dataSnapshot.getValue();
-                for (Map.Entry<String,Object> entry : mapPrayer.entrySet()) {
-                    Map singlePrayer = (Map) entry.getValue();
-                    Prayer mPrayer = new Prayer((String) singlePrayer.get("place"), (String) singlePrayer.get("time"));
-                    mListPrayer.add(mPrayer);
-                }
-
-                Collections.sort(mListPrayer);
-                currentPrayer = 0;
-                mListSynagogue.clear();
-                for (Prayer singlePrayer : mListPrayer){
-                    if(currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY || currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY){
-                        if(singlePrayer.getPlace().equals("שערי ציון") && singlePrayer.getTime().equals("6:00"))
-                            singlePrayer.setTime("5:50");
-                        else if (singlePrayer.getPlace().equals("מרכזי") && singlePrayer.getTime().equals("6:00"))
-                            singlePrayer.setTime("5:50");
-                    }
-                    nextTimeT = singlePrayer.getTime();
-                    mListSynagogue.add(singlePrayer.getPlace());
-                    tempNextTimePrayer = mListPrayer.get(currentPrayer + 1).getTime();
-                    while (tempNextTimePrayer.equals(nextTimeT)) {
-                        mListSynagogue.add(mListPrayer.get(currentPrayer + 1).getPlace());
-                        currentPrayer++;
-                        tempNextTimePrayer = mListPrayer.get(currentPrayer + 1).getTime();
-                    }
-                    synagogueArrayAdapter.notifyDataSetChanged();
-                    tvTimePrayer.setText(singlePrayer.getTime());
-                    textViewNextPrayer.setText("שחרית");
-                    return;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-    public void allPrayers(){
-        mDataBase = FirebaseDatabase.getInstance().getReference();
-        mDataBase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> prayersMap = (Map<String, Object>) dataSnapshot.getValue();
-                for (Map.Entry<String, Object> entry: prayersMap.entrySet()){
-                    if(entry.getKey().equals("sahrit") || entry.getKey().equals("mincha") || entry.getKey().equals("arvit")){
-                        Map<String, Object> sinPrayer = (Map) entry.getValue();
-                        for(Map.Entry<String, Object> entryPrayer: sinPrayer.entrySet()){
-                            Map singMinyan = (Map) entryPrayer.getValue();
-                            Prayer prayer = new Prayer(
-                                    (String) singMinyan.get("place"),
-                                    (String) singMinyan.get("time")
-                            );
-                            prayer.setKind(entry.getKey());
-                            allPrayers.add(prayer);
-                        }
-                    }
-                }
-                if (currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY || currentTime.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY)
-                    for (Prayer prayer : allPrayers) {
-                        if (prayer.getPlace().equals("שערי ציון") && prayer.getTime().equals("6:00"))
-                            prayer.setTime("5:50");
-                        else if (prayer.getPlace().equals("מרכזי") && prayer.getTime().equals("6:00"))
-                            prayer.setTime("5:50");
-
-                    }
-                Collections.sort(allPrayers);
-                initPrayersVP();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     private boolean isNetworkAvailable() {
@@ -547,13 +309,6 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         UiUtils.INSTANCE.centerTitle(this);
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.times_prayers, menu);
-        return true;
-    }*/
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         textViewNextPrayer = findViewById(R.id.textViewNextPrayer);
@@ -562,7 +317,6 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
         animationView_location.playAnimation();
         animationView_clock.playAnimation();
         animationView_prayer.playAnimation();
-        String flag;
         switch (item.getItemId()) {
             case android.R.id.home:
                 if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -572,75 +326,9 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
                     drawerLayout.openDrawer(GravityCompat.START);
                 }
                 return true;
-            case R.id.next_prayer:
-                if(textViewNextPrayer.getText().toString().matches("")){
-                    startActivity(new Intent(MainActivity.this, PopActivity.class));
-                }
-                else {
-                    flag = "next";
-                    String strTimeAppears = tvTimePrayer.getText().toString();
-                    int intTimeApeers = Integer.parseInt((strTimeAppears.substring(0, strTimeAppears.indexOf(":"))) + (strTimeAppears.substring(strTimeAppears.indexOf(":") + 1)));
-                    for (int i = 0; i < allPrayers.size(); i++) {
-                        String strTimeAtList = allPrayers.get(i).getTime();
-                        int intTimeAtList = Integer.parseInt(((strTimeAtList.substring(0, strTimeAtList.indexOf(":"))) + (strTimeAtList.substring(strTimeAtList.indexOf(":") + 1))));
-                        if (intTimeAtList > intTimeApeers) {
-                            //updateFieldWhenUserClickNextAndPrev(i, flag);
-                            return true;
-                        }
-                    }
-                }
-                return true;
-
-            case R.id.prev_prayer:
-                if(textViewNextPrayer.getText().toString().matches("")){
-                    startActivity(new Intent(MainActivity.this, PopActivity.class));
-                }
-                else {
-                    flag = "prev";
-                    String strTimeAppearsPrev = tvTimePrayer.getText().toString();
-                    int intTimeApeersPrev = Integer.parseInt((strTimeAppearsPrev.substring(0, strTimeAppearsPrev.indexOf(":"))) + (strTimeAppearsPrev.substring(strTimeAppearsPrev.indexOf(":") + 1)));
-                    for (int i = allPrayers.size() - 1; i >= 0; i--) {
-                        String strTimeAtList = allPrayers.get(i).getTime();
-                        int intTimeAtList = Integer.parseInt(((strTimeAtList.substring(0, strTimeAtList.indexOf(":"))) + (strTimeAtList.substring(strTimeAtList.indexOf(":") + 1))));
-                        if (intTimeApeersPrev > intTimeAtList) {
-                            //updateFieldWhenUserClickNextAndPrev(i, flag);
-                            return true;
-                        }
-                    }
-                }
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-   /* public void updateFieldWhenUserClickNextAndPrev(int i, String flag){
-        textViewNextPrayer.setText(namePrayerToHeb(allPrayers.get(i).getKind()));
-        tvTimePrayer.setText(allPrayers.get(i).getTime());
-        mListSynagogue.clear();
-        final CustomAdapterSyn synagogueArrayAdapter = new CustomAdapterSyn(mListSynagogue,getApplicationContext());
-        lvSynagogue.setAdapter(synagogueArrayAdapter);
-        currentPrayer = i;
-        mListSynagogue.add(allPrayers.get(i).getPlace());
-        if(currentPrayer+1 < allPrayers.size() && flag.equals("next")) {
-            tempNextTimePrayer = allPrayers.get(currentPrayer + 1).getTime();
-            while (tempNextTimePrayer.equals(allPrayers.get(i).getTime())) {
-                mListSynagogue.add(allPrayers.get(currentPrayer + 1).getPlace());
-                currentPrayer++;
-                tempNextTimePrayer = allPrayers.get(currentPrayer + 1).getTime();
-            }
-        }
-        else if(currentPrayer-1 >= 0 && flag.equals("prev")){
-            tempNextTimePrayer = allPrayers.get(currentPrayer-1).getTime();
-            while (tempNextTimePrayer.equals(allPrayers.get(i).getTime())){
-                mListSynagogue.add(allPrayers.get(currentPrayer-1).getPlace());
-                currentPrayer--;
-                if(currentPrayer-1 >= 0)
-                    tempNextTimePrayer = allPrayers.get(currentPrayer -1).getTime();
-                else return;;
-            }
-        }
-        synagogueArrayAdapter.notifyDataSetChanged();
-    }*/
 
     private void initPrayersVP(){
         allPrayers = NetworkManager.INSTANCE.getAllPrayers();
@@ -674,6 +362,7 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
           String time;
           int mainPrayer = 0;
         for (int i=0; i<allPrayers.size(); i++){
+            allPrayers.get(i).setSynagogueList(new ArrayList<>());
             time = allPrayers.get(i).getTime();
             if (i+1<allPrayers.size() && TextUtils.equals(time, allPrayers.get(i+1).getTime())){
                 allPrayers.get(mainPrayer).getSynagogueList().add(allPrayers.get(i+1).getPlace());
@@ -752,5 +441,16 @@ public class MainActivity extends AppCompatActivity implements PrayersViewPagerA
             calendar.add(Calendar.DATE, 1);
         }
         return calendar;
+    }
+
+    @Override
+    public void firstDataFetched() {
+        initRecyclerNews();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        NetworkManager.INSTANCE.removeListener(this);
     }
 }

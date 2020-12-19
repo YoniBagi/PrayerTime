@@ -10,6 +10,9 @@ import com.yonatan.asusx541u.pacPrayerTime.model.News
 import com.yonatan.asusx541u.pacPrayerTime.model.Prayer
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
+
+const val TAG = "NetworkManager"
 
 object NetworkManager {
     private var adsList =  ArrayList<String>()
@@ -20,7 +23,7 @@ object NetworkManager {
     private var allPrayerFetched = false
     private var newsFetched = false
     private val newsArrayList = ArrayList<News>()
-    private var mDataListener : DataListener? = null
+    private var mDataListener : HashSet<DataListener?> = hashSetOf()
 
     fun fetchData(){
         //fetchAds()
@@ -35,18 +38,21 @@ object NetworkManager {
                     newsArrayList.clear()
                     for (itemDataSnapshot in dataSnapshot.children) {
                         val news = itemDataSnapshot.getValue(News::class.java)
-                        if (news.content != null && !news.content.isEmpty()) {
+                        news?.id = itemDataSnapshot.key
+                        if (news?.content != null && news.content.isNotEmpty()) {
                             news.typeNewsViewHolder = TypeNewsViewHolder.DETAILS_NEWS
                         } else {
-                            news.typeNewsViewHolder = TypeNewsViewHolder.IMAGE_NEWS
+                            news?.typeNewsViewHolder = TypeNewsViewHolder.IMAGE_NEWS
                         }
-                        newsArrayList.add(news)
+                        news?.let { newsArrayList.add(it) }
                     }
                     //todo newsAdapter.notifyDataSetChanged()
                     newsFetched = true
                     checkIfAllDataFetched()
                 } catch (e: Exception) {
-                    if (e.message != null) Log.d("Request News:", e.message)
+                    if (e.message != null) {
+                        e.message?.let { Log.d("Request News:", it) }
+                    }
                 }
             }
 
@@ -56,7 +62,10 @@ object NetworkManager {
 
     private fun checkIfAllDataFetched() {
         if (allPrayerFetched && newsFetched){
-            mDataListener?.firstDataFetched()
+            for (listener in mDataListener){
+                Log.d(TAG, "listener: ${listener.toString()}" )
+                listener?.firstDataFetched()
+            }
         }
     }
 
@@ -128,11 +137,14 @@ object NetworkManager {
     }
 
     fun setDataListener(dataListener: DataListener){
-        mDataListener = dataListener
+        mDataListener.add(dataListener)
+    }
+
+    fun removeListener(dataListener: DataListener){
+        mDataListener.remove(dataListener)
     }
 
     interface DataListener{
-        fun adsCallback()
         fun firstDataFetched()
     }
 }

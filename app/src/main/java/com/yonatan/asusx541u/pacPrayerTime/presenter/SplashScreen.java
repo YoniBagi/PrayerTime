@@ -32,15 +32,29 @@ public class SplashScreen extends AppCompatActivity implements NetworkManager.Da
         setContentView(R.layout.activity_splash_screen);
         UiUtils.INSTANCE.centerTitle(this);
         initListener();
-        NetworkManager.INSTANCE.fetchData();
+        checkIfNeedFetchData();
         setImageAds();
         //initLottieAnim();
         //handleSplashDisplay();
 
     }
 
+    private void checkIfNeedFetchData() {
+        if (NetworkManager.INSTANCE.getAllPrayers().isEmpty()){
+            NetworkManager.INSTANCE.fetchData();
+        }else {
+            firstDataFetched();
+        }
+    }
+
     private void initListener() {
         NetworkManager.INSTANCE.setDataListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        NetworkManager.INSTANCE.removeListener(this);
     }
 
     private void handleSplashDisplay() {
@@ -102,9 +116,6 @@ public class SplashScreen extends AppCompatActivity implements NetworkManager.Da
         super.onResume();
         AnalyticsManager.INSTANCE.logScreenOpen(this.getLocalClassName());
     }
-
-    @Override
-    public void adsCallback() { }
 
     @Override
     public void firstDataFetched() {
